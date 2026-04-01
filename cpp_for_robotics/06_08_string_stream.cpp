@@ -27,6 +27,9 @@ int main() {
     }
 
 
+    // Clearing the Stream with Empty String !
+    
+    myStream.str("");
     myStream << "Robot Details\nMotor Speed: " << motorSpeed << "m/s, Battery Level: " << batteryLevel << endl;
 
     cout << myStream.str();
