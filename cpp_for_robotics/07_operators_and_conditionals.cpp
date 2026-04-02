@@ -144,6 +144,37 @@ int main() {
         cout << "Robot iteration: " << new_count << endl;
         new_count++;
     } while (new_count < 3);
+
+
+    // Break and Continue
+    int distances[] = {10, 20, 5, 30, 15};
+    int max_distance = 25;
+ 
+    for (int i = 0; i < 5; i++) {
+        if (distances[i] > max_distance) {
+            cout << "Distance exceeds maximum limit. Stopping robot." << endl;
+            break;
+        }
+        if (distances[i] < 10) {
+            cout << "Distance too short. Skipping iteration." << endl;
+            continue;
+        }
+        cout << "Moving robot " << distances[i] << " units." << endl;
+    }
+
+
+    // Ternary Operators
+    int battery_level = 75;
+    int battery_threshold = 20;
+ 
+    string battery_status = (battery_level > battery_threshold) ? "Sufficient" : "Low";
+    cout << "Battery Status: " << battery_status << endl;
+ 
+    int distance_to_obstacle = 30;
+    int safety_distance = 50;
+ 
+    string action = (distance_to_obstacle < safety_distance) ? "Stop" : "Continue";
+    cout << "Action: " << action << endl;
  
 
     return 0;
