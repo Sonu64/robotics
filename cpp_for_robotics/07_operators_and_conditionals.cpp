@@ -1,4 +1,5 @@
 #include <iostream>
+using namespace std;
  
 int main() {
     // Basic arithmetic operations
@@ -21,12 +22,12 @@ int main() {
     int remainder = motor_speed % 30;
  
     // Output results
-    std::cout << "Original Speed: " << motor_speed << std::endl;
-    std::cout << "Increased Speed: " << increased_speed << std::endl;
-    std::cout << "Decreased Speed: " << decreased_speed << std::endl;
-    std::cout << "Double Speed: " << double_speed << std::endl;
-    std::cout << "Half Speed: " << half_speed << std::endl;
-    std::cout << "Remainder: " << remainder << std::endl;
+    cout << "Original Speed: " << motor_speed << endl;
+    cout << "Increased Speed: " << increased_speed << endl;
+    cout << "Decreased Speed: " << decreased_speed << endl;
+    cout << "Double Speed: " << double_speed << endl;
+    cout << "Half Speed: " << half_speed << endl;
+    cout << "Remainder: " << remainder << endl;
 
 
 
@@ -44,20 +45,20 @@ int main() {
 
 
 
-    
+
 
     /*Conditionals*/
     double battery_level = 0.05;
     bool obstacle_detected = true;
  
     if (battery_level > 0.5 && !obstacle_detected) {
-        std::cout << "Robot is moving forward." << std::endl;
+        cout << "Robot is moving forward." << endl;
     } 
     else if (battery_level > 0.5 && obstacle_detected) {
-        std::cout << "Robot is avoiding the obstacle." << std::endl;
+        cout << "Robot is avoiding the obstacle." << endl;
     } 
     else {
-        std::cout << "Robot is stopping due to low battery." << std::endl;
+        cout << "Robot is stopping due to low battery." << endl;
     }
 
 
@@ -78,17 +79,72 @@ int main() {
     int distance_to_obstacle = 50;
  
     if (distance_to_obstacle < 30) {
-        std::cout << "Robot is stopping to avoid collision." << std::endl;
+        cout << "Robot is stopping to avoid collision." << endl;
     }
     else if (distance_to_obstacle < 60) {
-        std::cout << "Robot is slowing down." << std::endl;
+        cout << "Robot is slowing down." << endl;
     } 
     else if (distance_to_obstacle < 100) {
-        std::cout << "Robot is moving forward cautiously." << std::endl;
+        cout << "Robot is moving forward cautiously." << endl;
     } 
     else {
-        std::cout << "Robot is moving forward at full speed." << std::endl;
+        cout << "Robot is moving forward at full speed." << endl;
     }
+
+
+
+
+
+
+
+
+
+    // For Loops
+    int robot_positions[] = {0, 10, 20, 30, 40};
+ 
+    for (int i = 0; i < 5; i++) {
+        cout << "Robot Position: " << robot_positions[i] << endl;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    // While Loop
+    int distance = 0;
+    int target_distance = 100;
+    int step_size = 10;
+ 
+    while (distance < target_distance) {
+        distance += step_size;
+        cout << "Robot moved " << distance << " units" << endl;
+    }
+ 
+    cout << "Robot reached the target distance." << endl;
+ 
+    int countdown = 5;
+    while (countdown > 0) {
+        cout << "Countdown: " << countdown << endl;
+        countdown--;
+    }
+ 
+    cout << "Countdown finished. Launching the robot!" << endl;
+
+
+    // Do-while Loop
+    int new_count = 0;
+ 
+    do {
+        cout << "Robot iteration: " << new_count << endl;
+        new_count++;
+    } while (new_count < 3);
+ 
 
     return 0;
 }
