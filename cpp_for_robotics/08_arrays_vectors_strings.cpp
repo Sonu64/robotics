@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <cctype>
  
 using namespace std;
  
@@ -28,9 +30,6 @@ int main() {
 
 
 
-
-
-
     // VECTORS
     vector<int> motor_speeds;
  
@@ -44,6 +43,59 @@ int main() {
     for (int i = 0; i < motor_speeds.size(); i++) {
         cout << "Motor " << i + 1 << ": " << motor_speeds[i] << endl;
     }
+
+
+
+
+
+
+
+    /* String Manipulation */
+    string robot_name = "A-Dreamy-Bot-to-do-all-Dreamy-Tasks";
+     
+    // Accessing string characters
+    cout << "Robot Name: " << robot_name << endl;
+    cout << "First Character: " << robot_name[0] << endl;
+     
+    // Modifying strings, Character must,  Double quotes not allowed !
+    robot_name[8] = '=';
+    cout << "Modified Robot Name: " << robot_name << endl;
+
+    // Concatenating strings, Double Quotes must !
+    string model = "X100";
+    string full_name = robot_name + " " + model;
+    cout << "Full Name: " << full_name << endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* Employing Character functions */
+    char command = 'f'; 
+    // this should be a character ! so stringName[index] should also work !
  
+    // Checking character properties
+    if (islower(command)) {
+        cout << "Command is lowercase" << endl;
+    }
+ 
+    // Converting character case
+    char uppercase_command = toupper(command);
+    cout << "Uppercase Command: " << uppercase_command << endl;
+ 
+    // Checking character equality
+    if (command == 'f') {
+        cout << "Command is 'f'" << endl;
+    }
+
     return 0;
 }
