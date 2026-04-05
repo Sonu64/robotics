@@ -10,6 +10,7 @@ public:
     LidarScanner(int res) {
         resolution = res;
         data = new int[resolution]; // Dynamic Allocation
+        // C Logic: ptr = (int*)malloc(resolution * sizeof(int));
         for(int i=0; i<resolution; i++) {
             data[i] = 0;
         }
