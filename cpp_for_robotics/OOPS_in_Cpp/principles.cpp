@@ -39,6 +39,10 @@ class BaseRobot : public RobotInterface {
                 cerr << "Invalid Battery Level !" << endl;
             }
         }
+
+        ~BaseRobot() {
+            cout << "Deleting BaseRobot with id " << this->robot_id << endl;
+        }
 };
 
 // --- INHERITANCE ---
@@ -50,7 +54,7 @@ public:
     // body,  but in C++ : Parent() is called after Constructor signture, just before
     // the curly braces for the actual body starts !
     Drone(string id) : BaseRobot(id) {
-        cout << "Drone Initializing..." << endl;
+        cout << "Initializing Drone..." << endl;
     }
 
     // --- POLYMORPHISM (Function Overriding) ---
@@ -61,6 +65,10 @@ public:
 
     void showStatus() override {
         cout << "Drone ID: " << robot_id << " | Battery: " << battery_level << "%" << endl;
+    }
+
+    ~Drone() {
+        cout << "Drone Deleting..." << endl;
     }
 };
 
@@ -80,6 +88,10 @@ public:
 
     void showStatus() override {
         cout << "Rover ID: " << robot_id << " | Battery: " << battery_level << "%" << endl;
+    }
+
+    ~Rover() {
+        cout << "Rover Deleting..." << endl;
     }
 };
 
