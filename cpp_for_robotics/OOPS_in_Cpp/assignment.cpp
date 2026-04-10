@@ -9,6 +9,7 @@ class RobotInterface {
     public:
         virtual void move() = 0;
         virtual void showStatus() = 0;
+        virtual void showType() = 0;
         virtual ~RobotInterface() {}
 };
 
@@ -32,6 +33,13 @@ class MovingRobot : public RobotInterface {
             cout << "Deleting MovingRobot with ID = " << this->id << endl;
         }
         // still got a pure virtual, undefined func, move() !!!, so we need lowest level abstraction for that
+
+
+
+        //....defining showType() here, only to be overridden in the lowest abstraction layer, so that we can call it in main() without worrying about the type of robot, and it will show the type of robot at runtime due to polymorphism.
+        void showType() {
+            cout << "Type: General Moving Robot. !!! WARNING: This is a base class for all moving robots. So this class is Abstract and directly not instantiable and you should not see this output practically and logically :( you should see the type of the specific robot instance like Drone, Rover or Underwater Bot." << endl;
+        }
 };
 
 
@@ -52,6 +60,9 @@ class Drone : public MovingRobot {
         Drone(int drone_id, string drone_name, int drone_battery_level, int altitude) : MovingRobot(drone_id, drone_name, drone_battery_level) {
             this->altitude = altitude;
             cout << "Initializing Drone..." << endl;
+        }
+        void showType() {
+            cout << "Type: Drone." << endl;
         }
         void move() {
             cout << "Soaring into the heights... [Altitude = " << this->altitude << " meters]" << endl;
@@ -75,6 +86,9 @@ class UnderWaterBot : public MovingRobot {
             this->depth = depth;
             cout << "Initializing Underwater Bot..." << endl;
         }
+        void showType() {
+            cout << "Type: Underwater Bot." << endl;
+        }
         void move() {
             cout << "Diving into the depths... [Depth = " << this->depth << " meters]" << endl;
         }
@@ -97,6 +111,9 @@ class Rover : public MovingRobot {
             this->distance_traveled = distance_traveled;
             cout << "Initializing Rover..." << endl;
         }
+        void showType() {
+            cout << "Type: Rover." << endl;
+        }
         void move() {
             cout << "Traversing the terrain... [Distance Traveled = " << this->distance_traveled << " meters]" << endl;
         }
@@ -107,6 +124,9 @@ class Rover : public MovingRobot {
 
 
 int main() {
+
+    cout << "\n----------------------- Starting Fleet Mission Stimulation -----------------------\n" << endl;
+
     // mind the line below
     // -> A Vector containing Dynamically allocated Robots (Polymorphic objects)
     /// thats why using * notation.
@@ -120,6 +140,7 @@ int main() {
 
     for (RobotInterface* bot : fleet) {
         bot->showStatus();
+        bot->showType();
         bot->move(); // Polymorphism: The right 'move' is called at runtime!
         cout << "--------------------------------" << endl;
     }
@@ -129,6 +150,7 @@ int main() {
         delete bot; // This will call the appropriate destructor due to virtual destructors in the base class.
     }
     fleet.clear();
+    cout << "\n----------------------- All robots have been decommissioned and memory cleaned up -----------------------\n" << endl;
 
     return 0;
 }
