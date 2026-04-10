@@ -104,3 +104,31 @@ class Rover : public MovingRobot {
             cout << "Deleting Rover..." << endl;
         }
 };
+
+
+int main() {
+    // mind the line below
+    // -> A Vector containing Dynamically allocated Robots (Polymorphic objects)
+    /// thats why using * notation.
+    vector<RobotInterface*> fleet;
+
+    fleet.push_back(new Drone(1, "Sky-01", 85, 120));
+    fleet.push_back(new UnderWaterBot(2, "Aqua-Explorer", 90, 50));
+    fleet.push_back(new Rover(3, "Ground-Alpha", 75, 200));
+
+    cout << "--- Initializing Fleet Mission ---" << endl;
+
+    for (RobotInterface* bot : fleet) {
+        bot->showStatus();
+        bot->move(); // Polymorphism: The right 'move' is called at runtime!
+        cout << "--------------------------------" << endl;
+    }
+
+    // Cleaning up the Heap (The Architect's duty)
+    for (RobotInterface* bot : fleet) {
+        delete bot; // This will call the appropriate destructor due to virtual destructors in the base class.
+    }
+    fleet.clear();
+
+    return 0;
+}
