@@ -14,6 +14,21 @@ class RobotInterface {
         virtual ~RobotInterface() {} // Virtual destructor for memory safety
 };
 
+class RoboticArm : public RobotInterface {
+    protected:
+        string arm_id;
+        int charging_point_id;
+    public:
+        RoboticArm(string arm_id, int charging_point_id) {
+            this->arm_id = arm_id;
+            this->charging_point_id = charging_point_id;
+        }
+    // this class also has move and showStatus(), but I can choose to define them in the lowest abstraction layer, .i.e->When Creatinng something like "PackageDeliveryArm", "SurgeryArm"...etc.
+    ~RoboticArm() {
+        cout << "Deleting Robotic Arm with arm_id = " << this->arm_id << endl; // can keep this space empty here, actual destructor will call the exact type of Arm Destructor like -> "~PackageDeliveryArm", "~SurgeryArm"...still must keep this defnn here, can be empty...but it follows the Bottom->Up Desctructor logic order perfectly.
+    }
+};
+
 // --- INHERITANCE ---
 // BaseRobot acts as a parent, holding common attributes for all robots.
 class BaseRobot : public RobotInterface {
