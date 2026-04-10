@@ -34,6 +34,73 @@ class MovingRobot : public RobotInterface {
         // still got a pure virtual, undefined func, move() !!!, so we need lowest level abstraction for that
 };
 
+
+
+
+
+
+
+
+
+
+
 class Drone : public MovingRobot {
-    
-}
+    //...protected members are inherited already---> But they dont't have their values yet , so if we wanna give values, we will take them as args herein constrcutor and then chain that for the parent constrcutor call... 
+    protected:
+        int altitude;
+    public:
+        Drone(int drone_id, string drone_name, int drone_battery_level, int altitude) : MovingRobot(drone_id, drone_name, drone_battery_level) {
+            this->altitude = altitude;
+            cout << "Initializing Drone..." << endl;
+        }
+        void move() {
+            cout << "Soaring into the heights... [Altitude = " << this->altitude << " meters]" << endl;
+        }
+        ~Drone() {
+            cout << "Deleting Drone..." << endl;
+        }
+};
+
+
+
+
+
+
+class UnderWaterBot : public MovingRobot {
+    //...protected members are inherited already---> But they dont't have their values yet , so if we wanna give values, we will take them as args herein constrcutor and then chain that for the parent constrcutor call... 
+    protected:
+        int depth;
+    public:
+        UnderWaterBot(int underwater_bot_id, string underwater_bot_name, int underwater_bot_battery_level, int depth) : MovingRobot(underwater_bot_id, underwater_bot_name, underwater_bot_battery_level) {
+            this->depth = depth;
+            cout << "Initializing Underwater Bot..." << endl;
+        }
+        void move() {
+            cout << "Diving into the depths... [Depth = " << this->depth << " meters]" << endl;
+        }
+        ~UnderWaterBot() {
+            cout << "Deleting Underwater Bot..." << endl;
+        }
+};
+
+
+
+
+
+
+class Rover : public MovingRobot {
+    //...protected members are inherited already---> But they dont't have their values yet , so if we wanna give values, we will take them as args herein constrcutor and then chain that for the parent constrcutor call... 
+    protected:
+        int distance_traveled;
+    public:
+        Rover(int rover_id, string rover_name, int rover_battery_level, int distance_traveled) : MovingRobot(rover_id, rover_name, rover_battery_level) {
+            this->distance_traveled = distance_traveled;
+            cout << "Initializing Rover..." << endl;
+        }
+        void move() {
+            cout << "Traversing the terrain... [Distance Traveled = " << this->distance_traveled << " meters]" << endl;
+        }
+        ~Rover() {
+            cout << "Deleting Rover..." << endl;
+        }
+};
