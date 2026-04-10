@@ -9,7 +9,7 @@ class RobotInterface {
     public:
         virtual void move() = 0;
         virtual void showStatus() = 0;
-        ~RobotInterface() {}
+        virtual ~RobotInterface() {}
 };
 
 // Abstract class,  extending from the interface
