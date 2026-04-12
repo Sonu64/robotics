@@ -29,8 +29,19 @@ void Robot::shout() {
     cout << "I am a Robot! Beep Boop! My name is " << name << "." << endl;
 }
 // Defining the constructor of Robot class declared in the header file
-Robot::Robot(std::string robot_name) : name(robot_name) {
-    cout << "Robot initialized with name: " << name << endl;
+Robot::Robot(std::string robot_name, int battery) : name(robot_name), battery_level(battery) {
+    count++; // Increment the static count whenever a new Robot is created
+    cout << "Robot initialized with name: " << name << " and battery level: " << battery_level << "%." << endl;
+}
+//..defining the showBatteryLevel() member function of Robot class declared in the header file
+void Robot::showBatteryLevel() {
+    cout << "Battery Level: " << battery_level << "%." << endl;
+}
+
+int Robot::count = 0; // Initialize the static member variable count to 0
+
+int Robot::getCount() {
+    return count; // Return the current count of Robot instances
 }
 
 
@@ -41,8 +52,11 @@ int main() {
     sensor.displayRange();
     cout << "Current distance reading: " << sensor.getDistance() << " meters." << endl;
 
-    Robot myRobot("Frankestein");
+    Robot myRobot("Frankestein", 80);
     myRobot.shout();
+    myRobot.showBatteryLevel();
+    cout << "Total number of Robot instances: [Remember that the static var was public, that's why it was directly accessible, else we should use a getter as below...]" << Robot::count << endl;
+    cout << "Getting total Robot Instances from the static member function: " << Robot::getCount() << endl;
 
     return 0;
 }
