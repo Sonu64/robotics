@@ -12,9 +12,21 @@ class Robot {
         int id;
     public:
         static int count; // static member to keep track of the number of Robot instances, by deafult it is initialized to 0
+        /// @brief the constructor
+        /// @param robot_name the name of the robot, default is "Unnamed Robot"
+        /// @param battery the initial battery level of the robot, default is 100%
+        /// @return none
         Robot(std::string robot_name = "Unnamed Robot", int battery = 100);
+        /// @brief  the destructor, it will be called when an object goes out of scope or is explicitly deleted, it will decrement the count of Robot instances
+        /// @return none
         ~Robot(); // Destructor declaration, it will be called when an object goes out of scope or is explicitly deleted, it will decrement the count of Robot instances
+        /// @brief a simple member function to print a message with the robot's name
+        /// @return none
+        /// @param none
         void shout();
+        /// @brief a member function to show the current battery level of the robot
+        /// @return none
+        /// @param none
         void showBatteryLevel();
 
         // functions to be overloaded

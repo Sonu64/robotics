@@ -12,7 +12,7 @@
  */
 
 using namespace std;
-
+/// @brief a simple class to demonstrate Object Oriented Programming concepts in C++. It has private members for name and battery level, a protected member for id, and public members including a static count of Robot instances, a constructor, a destructor, and member functions to shout, show battery level, and show distance (overloaded).
 class DistanceSensor {
     private:
         double distance;
