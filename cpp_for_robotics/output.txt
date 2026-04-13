@@ -1,8 +1,0 @@
-Distance Sensor initialized with max distance: 100 meters.
-Distance Sensor Range: 0 to 100 meters.
-Current distance reading: 100 meters.
-Robot initialized with name: Frankestein and battery level: 80%.
-I am a Robot! Beep Boop! My name is Frankestein.
-Battery Level: 80%.
-Total number of Robot instances: [Remember that the static var was public, that's why it was directly accessible, else we should use a getter as below...]1
-Getting total Robot Instances from the static member function: 1

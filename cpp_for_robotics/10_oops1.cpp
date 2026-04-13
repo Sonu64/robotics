@@ -1,7 +1,15 @@
 // compiler specifed includes
 #include <iostream>
 // user defined includes
-#include "11_robot.hpp"
+#include "11_robot.hpp" // Linker "stiches" the declaration of the class from the header file with its definition in the .cpp file, it allows us to separate the interface (in .hpp) from the implementation (in .cpp), which is a good practice for better organization and maintainability of code. Command should compile both the files together, for example: g++ 10_oops1.cpp 11_robot.cpp -o robot_program or simply g++ 10_oops1.cpp 11_robot.cpp to create an executable named a.out by default.
+
+// g++ 10_oops1.cpp 11_robot.cpp -o robot_app
+/* 
+    What just happened?
+        10_oops1.cpp: Compiles the main() logic.
+        11_robot.cpp: Compiles the Robot logic.
+        The Linker (ld): Joins them together into one executable called robot_app.
+ */
 
 using namespace std;
 
@@ -22,28 +30,6 @@ class DistanceSensor {
         }
 };
 
-// ... Generally the below code should be in a sepearte .cpp file like 11_robot.cpp, but for simplicity and demonstration purposes, we are keeping it here in the same file. In a real project, you should separate the declaration (in .hpp) and definition (in .cpp) of your classes for better organization and maintainability.
-
-// Defining the member function of Robot class declared in the header file
-void Robot::shout() {
-    cout << "I am a Robot! Beep Boop! My name is " << name << "." << endl;
-}
-// Defining the constructor of Robot class declared in the header file
-Robot::Robot(std::string robot_name, int battery) : name(robot_name), battery_level(battery) {
-    count++; // Increment the static count whenever a new Robot is created
-    cout << "Robot initialized with name: " << name << " and battery level: " << battery_level << "%." << endl;
-}
-//..defining the showBatteryLevel() member function of Robot class declared in the header file
-void Robot::showBatteryLevel() {
-    cout << "Battery Level: " << battery_level << "%." << endl;
-}
-
-int Robot::count = 0; // Initialize the static member variable count to 0
-
-int Robot::getCount() {
-    return count; // Return the current count of Robot instances
-}
-
 
 
 int main() {
@@ -55,7 +41,9 @@ int main() {
     Robot myRobot("Frankestein", 80);
     myRobot.shout();
     myRobot.showBatteryLevel();
-    cout << "Total number of Robot instances: [Remember that the static var was public, that's why it was directly accessible, else we should use a getter as below...]" << Robot::count << endl;
+    myRobot.showDistance(5); // calling the first overloaded function
+    myRobot.showDistance(3.5, 4.2); // calling the second
+
     cout << "Getting total Robot Instances from the static member function: " << Robot::getCount() << endl;
 
     return 0;
