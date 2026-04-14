@@ -3,14 +3,26 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
-class Robot{
+class RobotClass{
+
+    
+
     private:
         string name;
         int battery_level;
     public:
+
+        static int count; // Static member variable to keep track of the number of Robot instances !!! Public Static Var-> Directly accessible outside class using the class name without needing an object
+
+        // Constructor to initialize the Robot object with a name and battery level
+        RobotClass(string robot_name, int battery) : name(robot_name), battery_level(battery) {
+            count++; // Increment the static count whenever a new Robot is created
+            cout << "Robot initialized with name: " << name << " and battery level: " << battery_level << "%." << endl;
+        }
         /// @brief Demonstration of setters and getters
         void setName(string robot_name) {
             this->name = robot_name;
@@ -24,4 +36,25 @@ class Robot{
         int getBatteryLevel() {
             return this->battery_level;
         }
+
+        static int calculateDistance(double x1, double y1, double x2, double y2) {
+            double dx = x2 - x1;
+            double dy = y2 - y1;
+            cout << "Can I access static variables ? YES -> count = " << RobotClass::count << endl; // Accessing static member variable inside a static member function
+            cout << "Can I access non-static variables ? NO -> name = " << "Cannot access non-static member variable in static member function" << endl; // Cannot access non-static member variable inside a static member function
+            return static_cast<int>(sqrt(dx * dx + dy * dy));
+        }
+};
+
+int RobotClass::count = 0; // Initialize the static member variable count to 0, this must be done outside the class definition, and it is necessary to allocate storage for the static member variable. This line is crucial to avoid linker errors when using the static member variable in the program.
+
+int main() {
+    RobotClass robot1("Robo1", 100);
+    RobotClass robot2("Robo2", 80);
+
+    cout << "Current Robot count: " << RobotClass::count << endl; // Accessing static member variable directly using the class name
+
+    cout << "Distance between (0,0) and (3,4) is: " << RobotClass::calculateDistance(0, 0, 3, 4) << " meters." << endl; // Calling static member function directly using the class name
+
+    return 0;
 }
