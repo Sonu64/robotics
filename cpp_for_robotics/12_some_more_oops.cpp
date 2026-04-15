@@ -9,12 +9,16 @@ using namespace std;
 
 class RobotClass{
 
-    
 
     private:
         string name;
         int battery_level;
     public:
+
+        /// @brief Demonstration of simple virtual functions
+        virtual void move() {
+            cout << this->name << " is Moving..." << endl;
+        }
 
         static int count; // Static member variable to keep track of the number of Robot instances !!! Public Static Var-> Directly accessible outside class using the class name without needing an object
 
@@ -46,15 +50,32 @@ class RobotClass{
         }
 };
 
+class Drone : public RobotClass {
+
+    public:
+        // Constructor to initialize the Drone object using the base class constructor
+        Drone(string drone_name, int battery) : RobotClass(drone_name, battery) {}  
+
+    void move() override { // Override the move function from the base class to provide specific behavior for the Drone class
+        cout << getName() << " is flying..." << endl; // Using the getter function to access the name of the drone
+    }
+};
+
 int RobotClass::count = 0; // Initialize the static member variable count to 0, this must be done outside the class definition, and it is necessary to allocate storage for the static member variable. This line is crucial to avoid linker errors when using the static member variable in the program.
 
 int main() {
     RobotClass robot1("Robo1", 100);
     RobotClass robot2("Robo2", 80);
+    Drone* drone1 = new Drone("Drone1", 90);
 
     cout << "Current Robot count: " << RobotClass::count << endl; // Accessing static member variable directly using the class name
 
     cout << "Distance between (0,0) and (3,4) is: " << RobotClass::calculateDistance(0, 0, 3, 4) << " meters." << endl; // Calling static member function directly using the class name
+
+    cout << "Calling move function for robot1: " << endl;
+    robot1.move(); // Calls the move function of the RobotClass
+    cout << "Calling move function for drone1: " << endl;
+    drone1->move(); // Calls the overridden move function of the Drone class
 
     return 0;
 }
