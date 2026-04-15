@@ -75,7 +75,18 @@ int main() {
     cout << "Calling move function for robot1: " << endl;
     robot1.move(); // Calls the move function of the RobotClass
     cout << "Calling move function for drone1: " << endl;
-    drone1->move(); // Calls the overridden move function of the Drone class
+    drone1->move(); // Calls the overridden move function of the Drone class\
+
+    // retouching pointers
+    int number = 10;
+    int* ptr = &number; // Pointer to an integer variable
+    cout << "Value of number: " << number << endl; // Output: 10
+    cout << "Value pointed to by ptr: " << *ptr << endl; // Output: 10
+
+    cout << "While the value stored inside the ptr var is a hex address : " << ptr << endl; // Output: Hexadecimal address of the variable number
+
+    *ptr = 20; // Modifying the value of number through the pointer
+    cout << "Value of number after modification through pointer: " << number << endl; // Output: 20
 
     return 0;
 }
