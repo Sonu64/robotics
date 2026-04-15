@@ -26,7 +26,7 @@ class Servo : public ActuatorInterface {
 };
 
 
-/// @brief this function actually takes an actuator interface from the heap ! Dynamically allocated memory for the actuator interface, which can point to any derived class object (Motor or Servo) that implements the ActuatorInterface. This allows for polymorphic behavior, where the specific type of actuator can be determined at runtime. This is called Runtime Polymorphism, which is achieved through the use of virtual functions and pointers to base class objects. By using a pointer to the ActuatorInterface, we can call the activate() function without needing to know the specific type of actuator at compile time, allowing for flexibility and extensibility in our code.
+/// @brief  Here, the test_actuator function takes a reference (Actuator&) to an Actuator object. Using a reference ensures that no copying of the object occurs, which enhances efficiency by saving memory and processing time. It also guarantees that the passed object is valid since references cannot be null, adding a layer of safety to our function. 
 void testActuator(ActuatorInterface& actuator) {
     actuator.activate(); // Call the activate function on the actuator interface, which will invoke the appropriate implementation based on the actual type of the actuator object passed in // since we are already using reference to the base class, we can directly call the activate function without needing to dereference a pointer or use the -> operator.
 }
