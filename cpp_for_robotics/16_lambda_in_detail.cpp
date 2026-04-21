@@ -20,6 +20,8 @@ int main() {
     cout << "Enter the denominator: ";
     cin >> denominator;
 
+    int count = 0; // external variable.
+
     cout << "Using a normal function:" << endl;
     for_each(v.begin(), v.end(), printElement);
 
@@ -50,7 +52,19 @@ int main() {
         (x%denominator==0) ? cout << "Divisible\t" : cout << "Not Divisible\t";
     });
 
-    
+    cout << "\nCapturing an external variable by reference, also paramter passed by ref and marked const --> BEST PRACTICE IN ROBOTICS !" << endl;
+
+    // ERROR -> Cannot assign to a variable captured by copy in a non-mutable lambda
+    // for_each(v.begin(), v.end(), [count](const int& x){
+    //     // count++;
+    // }); 
+
+    // CORRECT WAY -> No Error ! 
+    for_each(v.begin(), v.end(), [&count](const int& x){
+        count++;
+    });
+
+    cout << "New Count is: " << count << endl;
 
 
     // [capture_clause] (params) {func_def}
