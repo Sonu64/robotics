@@ -12,6 +12,15 @@ void check(int x) {
     (x%2 == 0) ? cout << "Even\t" : cout << "Odd\t";
 }
 
+// /*  First lets see how the for_each Loop works, so that you don't get confused inside main ! They simply act like Java or JavaScript for_each Loops */
+
+// std::for_each iterates over the vector and calls your function once per element. The lambda parameter is what receives that current element. 
+// 
+// If you write auto x, each element is passed by value into x. 
+// If you write auto& x, it is passed by reference. 
+// If you write const auto& x, you avoid copying while also preventing modification.
+
+
 int main() {
 
     vector<int> v{2, 4, 56, 21, 90};
@@ -22,6 +31,7 @@ int main() {
 
     int count = 0; // external variable.
 
+    // Lambdas resemble Anonymous functions in Javascript, you dont need to define a function separately ! I know you no more do Web Development, but this much JS you know na !... Passing them feels like JS callbacks and using them feels like anonymous functions !
     cout << "Using a normal function:" << endl;
     for_each(v.begin(), v.end(), printElement);
 
@@ -44,12 +54,12 @@ int main() {
 
     cout << "\nCapturing an external variable by value:" << endl;
     for_each(v.begin(), v.end(), [denominator](int x){
-        (x%denominator==0) ? cout << "Divisible\t" : cout << "Not Divisible\t";
+        (x%denominator==0) ? cout << "YES\t" : cout << "NO\t";
     });
 
     cout << "\nCapturing an external variable by reference, also paramter passed by ref and marked const --> BEST PRACTICE IN ROBOTICS !" << endl;
     for_each(v.begin(), v.end(), [&denominator](const int& x){
-        (x%denominator==0) ? cout << "Divisible\t" : cout << "Not Divisible\t";
+        (x%denominator==0) ? cout << "YES\t" : cout << "NO\t";
     });
 
     cout << "\nCapturing an external variable by reference, also paramter passed by ref and marked const --> BEST PRACTICE IN ROBOTICS !" << endl;
@@ -69,9 +79,28 @@ int main() {
 
     // [capture_clause] (params) {func_def}
 
+
+    // Pass all external vars by Value — run lambda 5 time, but dont forget to call(invoke) it inside the loop ! Its not for_each ! A simple for it is Baby !
+    for(int i=0; i<5; i++) {
+        [=](){
+            cout << denominator*count << "\t" ;
+            // denominator++; ERROR !!! You know why !
+        } (); // () invokes the lambda
+    }
+
+    cout << "\n" << endl;
+
+    // Pass all external vars by Value — run lambda 5 time, but dont forget to call(invoke) it inside the loop ! Its not for_each ! A simple for it is Baby !
+    for(int i=0; i<5; i++) {
+        [&](){
+            cout << denominator*count << "\t" ;
+            denominator++; // No ERROR !!! You know why !
+        } (); // () invokes the lambda
+    }
+
+    cout << "\nNew Denominator is: " << denominator << endl;
+
+
     return 0;
 }
 
-/*  FOR_EACH DOUBT */
-
-// std::for_each iterates over the vector and calls your function once per element. The lambda parameter is what receives that current element. If you write auto x, each element is passed by value into x. If you write auto& x, it is passed by reference. If you write const auto& x, you avoid copying while also preventing modification.
