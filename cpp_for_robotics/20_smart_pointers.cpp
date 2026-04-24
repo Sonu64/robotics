@@ -1,7 +1,27 @@
 #include <iostream>
 #include <memory>
+#include <utility>
 
 using namespace std;
+
+
+class Robot {
+    public:
+        /// @brief Constructor
+        Robot() {
+            cout << "Robot Initialized..." << endl;
+        }
+        /// @brief Sample function to print
+        void sayHello() {
+            cout << "Hello ! I'm a Robot ! Beep Bop !" << endl;
+        }
+        /// @brief Destructor
+        ~Robot() {
+            cout << "Robot Deleted..." << endl;
+        }
+};
+
+
 
 int main() {
     int a = 11;
@@ -34,6 +54,14 @@ int main() {
     // and return a non-zero exit code (like Exit Code: 1 or 3221225477). 
     // It doesn't always print "Segmentation fault" to the console like Linux does.
     // But windows is highly improbabilistic in these cases, so best use Linux based OSs like Ubuntu or something else. This program may run on windows perfectly without letting you know what exit code it returned ! This can corrupt other program data, without letting you know ! So, Ubuntu is used for ROS2 C++ code.
+
+    // Demonstraing the automatic Deallocation behaviour
+   // Remember Dynamic Object allocation ! We do that here as well, but we dont have to manually delete the pointers now.
+    unique_ptr<Robot> robotPointer = make_unique<Robot>();
+
+    robotPointer->sayHello();
+
+    ///....robotPointer is already deleted at this point !  Aaaila Jaadu ! why is C++  giving Java vibes 😂
 
     return 0;
 }
