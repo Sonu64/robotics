@@ -61,7 +61,6 @@ int main() {
 
     robotPointer->sayHello();
 
-    ///....robotPointer is already deleted at this point !  Aaaila Jaadu ! why is C++  giving Java vibes 😂
 
     return 0;
 }
