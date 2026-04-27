@@ -95,9 +95,9 @@ int main() {
     odd_sum = findOddSum(start, end);
     stopTime = high_resolution_clock::now();
     auto duration2 = duration_cast<microseconds>(stopTime - startTime);
-    cout << "Time taken: " << (duration2.count() / 1000000) << " seconds." << endl;
+    cout << "Time taken: " << (duration2.count() / 1000000.0) << " seconds." << endl;
     cout << "Odd Sum = " << odd_sum << endl;
-    cout << "Total time taken: " << ((duration1.count()/1000000)+(duration2.count()/1000000)) << " seconds." << endl;
+    cout << "Total time taken: " << ((duration1.count()/1000000)+(duration2.count()/1000000.0)) << " seconds." << endl;
 
 
 
