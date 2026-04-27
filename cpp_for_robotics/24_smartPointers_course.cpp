@@ -34,6 +34,7 @@ int main() {
     if (auto shared_sensor = weak_sensor.lock()) { // if the sensor2 still exists and is valid... then temporarily make the weak_ptr a shared_ptr by locking and then prinnt the info.
 
         shared_sensor->printInfo();
+        // PRACTICE: Using the newly locked 'shared_sensor' instead of the original 'sensor2' guarantees thread-safe, temporary ownership. It ensures the object won't be deleted (e.g., by another thread) while we are actively using it inside this block.
     }
  
     return 0;
