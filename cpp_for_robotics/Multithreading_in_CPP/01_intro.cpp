@@ -85,19 +85,27 @@ int main() {
 
     auto startTime = high_resolution_clock::now();
     even_sum = findEvenSum(start, end);
+    cout << "Even Sum = " << even_sum << endl;
+    odd_sum = findOddSum(start, end);
     auto stopTime = high_resolution_clock::now();
     auto duration1 = duration_cast<microseconds>(stopTime - startTime);
-    cout << "Even Sum = " << even_sum << endl;
-    cout << "Time taken: " << (duration1.count() / 1000000) << " seconds." << endl;
+    cout << "Odd Sum = " << odd_sum << endl;
+    cout << "Total time taken: " << ((duration1.count()/1000000)) << " seconds." << endl;
 
 
+    cout << "\n\nUsing Multithreading now..." << endl;
     startTime = high_resolution_clock::now();
-    odd_sum = findOddSum(start, end);
+    // Creating threads with function pointers.
+    thread t1(findEvenSum, start, end);
+    thread t2(findOddSum, start, end);
+    // Join the parallel threads to main
+    t1.join();
+    t2.join();
     stopTime = high_resolution_clock::now();
     auto duration2 = duration_cast<microseconds>(stopTime - startTime);
-    cout << "Time taken: " << (duration2.count() / 1000000.0) << " seconds." << endl;
-    cout << "Odd Sum = " << odd_sum << endl;
-    cout << "Total time taken: " << ((duration1.count()/1000000)+(duration2.count()/1000000.0)) << " seconds." << endl;
+    cout << "Total time taken: " << ((duration2.count()/1000000)) << " seconds." << endl;
+
+
 
 
 
