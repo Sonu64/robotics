@@ -93,21 +93,18 @@ int main() {
     cout << "Total time taken: " << ((duration1.count()/1000000)) << " seconds." << endl;
 
 
+    
+
     cout << "\n\nUsing Multithreading now..." << endl;
     startTime = high_resolution_clock::now();
-    // Creating threads with function pointers.
+    // Use std::ref() to pass variables by reference to a thread
     thread t1(findEvenSum, start, end);
     thread t2(findOddSum, start, end);
-    // Join the parallel threads to main
     t1.join();
     t2.join();
     stopTime = high_resolution_clock::now();
     auto duration2 = duration_cast<microseconds>(stopTime - startTime);
     cout << "Total time taken: " << ((duration2.count()/1000000)) << " seconds." << endl;
-
-
-
-
 
     return 0;
 }
