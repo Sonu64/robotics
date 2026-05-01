@@ -50,5 +50,47 @@ int main() {
     }, 10);
     t4.join();
 
+
+
+
+
+    // Type-3: Injecting any functor Object in thread creation line
+    // --- I haven't leart Functors yet...so consider sort of "Black Box" for now...I will revisit this topic after classes
+    class PrintMultiplicationTable {
+        public:
+            PrintMultiplicationTable(int num) {
+                this->num = num;
+            }
+            void operator()() {
+                for(int i=1; i<=4; i++) {
+                    std::cout << num << " * " << i << " = " << (num*i) << std::endl;
+                }
+            }
+        private:
+            int num;
+    };
+    PrintMultiplicationTable p(20);
+    std::thread t5(p);
+    t5.join();       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+    
+    
     return 0;
 }
