@@ -79,14 +79,37 @@ int main() {
 
 
 
+    // Type-4 : Non-Static member function
+    class Sample {
+        public:
+            /// @brief Non-static member function below
+            void printTable(int x) {
+                for(int i=1; i<=4; i++) {
+                    std::cout << x << " * " << i << " = " << (x*i) << std::endl;
+                }
+            }
+    };
+    // Step-1: Create an object of that class
+
+    // ---------- Static allocation
+    Sample sampleObject;
+    // 🧠 Why `&sampleObject`? 
+    // `sampleObject` is an actual instance on the stack. `std::thread` needs a pointer to the object 
+    // to invoke its non-static member function, so we use the address-of operator `&` to get its raw pointer.
+    std::thread t6(&Sample::printTable, &sampleObject, 3);
+    t6.join();
+
+    // ---------- Dynamic Heap Allocation using a smart pointer
+    std::unique_ptr<Sample> heapSampleObject = std::make_unique<Sample>();
+    // 🧠 Why `heapSampleObject.get()`?
+    // `heapSampleObject` is a smart pointer wrapper. Using `&` on it would give the memory address of the smart pointer 
+    // itself. Instead, `.get()` extracts the underlying raw pointer to our heap-allocated `Sample` instance.
+    std::thread t7(&Sample::printTable, heapSampleObject.get(), 4);
+    t7.join();
 
 
 
-
-
-
-
-
+    
     
 
 
