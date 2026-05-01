@@ -109,9 +109,22 @@ int main() {
 
 
 
-    
+
     
 
+    // Type-5: Using Static member functions
+    class Sample2 {
+        public:
+            /// @brief Static member function below
+            static void printTable(int x) {
+                for(int i=1; i<=4; i++) {
+                    std::cout << x << " * " << i << " = " << (x*i) << std::endl;
+                }
+            }
+    };
+    // Since static member functions don't need objects to call them, we don't need the &objectName or objectName.get() here anymore.
+    std::thread t8(&Sample2::printTable, 800);
+    t8.join();
 
     
     
