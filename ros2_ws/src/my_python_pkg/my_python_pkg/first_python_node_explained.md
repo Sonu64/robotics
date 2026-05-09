@@ -153,7 +153,7 @@ is enough by itself to produce a log message.
 - Next common step is to add a timer, publisher, or subscriber.
 - Style note: Python convention is usually `args=args` (without spaces around `=` in function arguments), but your current line still works correctly.
 
-## File name vs node name
+## FileName vs Node name vs Executable name
 
 The file name and the node name are related, but they do not have to be the same.
 
@@ -161,6 +161,9 @@ The file name and the node name are related, but they do not have to be the same
 - The node name is the runtime name inside ROS 2, like `testing_python_node`.
 - ROS 2 cares about the node name when it is running.
 - Python cares about the file name when it loads or executes the script.
+- There is also the **executable name** from `setup.py` in `entry_points`, like `py_node`.
+- That executable name is what you run with `ros2 run my_python_pkg py_node`.
+- It is separate from both the file name and the ROS node name.
 
 You can make them similar for clarity, but it is not a rule.
 
@@ -174,11 +177,13 @@ Example:
 
 - File: `camera_reader.py`
 - Node name: `camera_reader`
+- Executable name in `setup.py`: `camera_reader`
 
 Or:
 
 - File: `first_python_node.py`
 - Node name: `testing_python_node`
+- Executable name in `setup.py`: `py_node`
 
 Both are valid.
 
