@@ -8,14 +8,22 @@ Source file: `first_python_node.py`
 import rclpy
 from rclpy.node import Node
 
+class MyNode(Node):
+    def __init__(self, node_name):
+        super().__init__(node_name)
+        self.get_logger().info("Magic Sensor node initialized.")
+        self.log_count = 0  # Counter to track how many times the warning was logged
+        self.create_timer(1.0, self.timer_callback)
+    
+    def timer_callback(self):
+        self.log_count += 1
+        self.get_logger().warning("Aaila Jaadu... " + str(self.log_count))
+
 
 def main(args=None):
     rclpy.init(args = args)
-
-    node = Node("testing_python_node")
-    node.get_logger().info("Hello, I wish someday a real robot listens this...")
+    node = MyNode("magic_sensor_node")
     rclpy.spin(node)
-
     rclpy.shutdown()
 
 if __name__ == "__main__" :
@@ -92,20 +100,28 @@ if __name__ == "__main__" :
 ## What this program does overall
 
 - Starts ROS 2.
-- Creates one node named `testing_python_node`.
-- Prints one INFO log line.
-- Waits (spins) until you stop it.
+- Creates one node called `MyNode` with the name `magic_sensor_node`.
+- Logs an INFO message once: "Magic Sensor node initialized."
+- Sets up a timer to fire every 1 second.
+- Every 1 second, the timer fires and calls `timer_callback()`.
+- In the callback, it increments a counter and logs a WARNING message with the count (e.g., "Aaila Jaadu... 1", "Aaila Jaadu... 2", etc.).
+- Keeps spinning (listening) until you stop it with Ctrl+C.
 - Shuts ROS 2 down cleanly.
 
 ## Expected terminal output when run
 
-You will see ROS 2-formatted logs. Exact timestamps/process IDs vary, but it will look similar to:
+You will see ROS 2-formatted logs. The node starts with an INFO message, then prints a WARNING message every 1 second with an incrementing counter:
 
 ```text
-[INFO] [<timestamp>] [testing_python_node]: Hello, I wish someday a real robot listens this...
+[INFO] [<timestamp>] [magic_sensor_node]: Magic Sensor node initialized.
+[WARNING] [<timestamp>] [magic_sensor_node]: Aaila Jaadu... 1
+[WARNING] [<timestamp>] [magic_sensor_node]: Aaila Jaadu... 2
+[WARNING] [<timestamp>] [magic_sensor_node]: Aaila Jaadu... 3
+[WARNING] [<timestamp>] [magic_sensor_node]: Aaila Jaadu... 4
+...
 ```
 
-If launched with `ros2 run`, ROS may also print startup/shutdown lines around this log.
+Each time the 1-second timer fires, a new warning appears with the next count number.
 
 ## Logging system explained simply
 
@@ -149,8 +165,11 @@ is enough by itself to produce a log message.
 
 ## Beginner notes
 
-- The node is currently a minimal "alive + log" node.
-- Next common step is to add a timer, publisher, or subscriber.
+- This node demonstrates a **class-based node** with custom initialization and a timer callback.
+- It shows how to maintain state across multiple callback invocations using instance variables.
+- It demonstrates periodic work (the timer fires every 1 second).
+- This is a small step up from a minimal "alive + single log" node.
+- Next common steps would be to add publishers, subscribers, or services.
 - Style note: Python convention is usually `args=args` (without spaces around `=` in function arguments), but your current line still works correctly.
 
 ## FileName vs Node name vs Executable name
@@ -215,3 +234,138 @@ For your current file, the clean beginner choice is:
 - one main purpose
 
 That makes the code easier to read and easier to grow later.
+
+## Timers and Periodic Callbacks (Repeated Actions Every N Seconds)
+
+In the current `MyNode` implementation, there is a timer that prints a warning message every 1 second. Here's how it works:
+
+### The Setup
+
+```python
+class MyNode(Node):
+    def __init__(self, node_name):
+        super().__init__(node_name)
+        self.get_logger().info("Magic Sensor node initialized.")
+        # Create a timer that fires every 1.0 second
+        self.create_timer(1.0, self.timer_callback)
+    
+    def timer_callback(self):
+        # This runs every 1 second, automatically
+        self.get_logger().warning("Aaila Jaadu... ")
+```
+
+### How It Works
+
+1. **`self.create_timer(1.0, self.timer_callback)`**
+   - Creates a timer object that belongs to the node.
+   - `1.0` is the period in seconds.
+   - `self.timer_callback` is the function to call each time the timer fires.
+   - The timer is automatically managed by ROS 2.
+
+2. **Why it prints every 1 second**
+   - When you call `rclpy.spin(node)` in `main()`, the spin loop takes over.
+   - Inside the spin loop, ROS 2 checks all timers attached to the node.
+   - Every 1 second, it sees that the timer has elapsed and automatically calls `timer_callback()`.
+   - The callback runs, logs the warning, and then control returns to spin.
+   - Spin continues waiting for the next event.
+
+3. **Spin is like a repeating event listener**
+   - `rclpy.spin(node)` does not do anything special on its own—it just waits.
+   - But while it waits, it listens for all registered events:
+     - Timer callbacks (like the 1-second timer here).
+     - Subscription callbacks (when messages arrive).
+     - Service callbacks (when a service is called).
+   - The moment any event is ready, spin executes its callback and waits for the next one.
+
+### Visual Timeline
+
+```
+Time (seconds):    0      1      2      3      4
+                   |      |      |      |      |
+Spin listening...  ------>@----->@----->@----->@...
+                    (init) (warn) (warn) (warn) (warn)
+                    
+@ = Timer fires, callback runs
+```
+
+### Why This Pattern Is Useful
+
+Timers let you:
+
+- **Poll sensors** at regular intervals (e.g., "read the IMU every 100 ms").
+- **Send heartbeat messages** to keep communication alive.
+- **Update actuators** at fixed rates (e.g., "adjust robot arm position every 50 ms").
+- **Log data** or check health status periodically.
+
+### Common Timer Periods
+
+- **0.05 seconds** (50 ms): Fast feedback loops, motor control.
+- **0.1 seconds** (100 ms): Moderate updates, sensor reading.
+- **1.0 second**: Slow monitoring, logging, status checks.
+- **5.0 seconds**: Very slow tasks, periodic health reports.
+
+### Changing the Period
+
+To print every 2 seconds instead of 1 second:
+
+```python
+self.create_timer(2.0, self.timer_callback)  # Now 2 seconds
+```
+
+### Multiple Timers
+
+A single node can have multiple timers at different rates:
+
+```python
+self.create_timer(0.5, self.fast_callback)   # Every 0.5 seconds
+self.create_timer(2.0, self.slow_callback)   # Every 2.0 seconds
+```
+
+Spin will handle all of them and call their callbacks on schedule.
+
+### Key Takeaway
+
+- Timers are how ROS 2 nodes perform **repeated, periodic work**.
+- `create_timer(period, callback)` schedules a callback to run every `period` seconds.
+- `rclpy.spin(node)` automatically invokes all callbacks as their timers fire.
+- You don't manually call the callback—ROS 2 does it for you on schedule.
+
+## Instance Variables (Maintaining State Across Callbacks)
+
+In `MyNode`, there is a variable called `self.log_count`. This is an **instance variable**.
+
+### What Is an Instance Variable?
+
+An instance variable belongs to a specific object (in this case, a `MyNode` object). It is created in `__init__` and persists as long as the object exists.
+
+```python
+class MyNode(Node):
+    def __init__(self, node_name):
+        super().__init__(node_name)
+        self.log_count = 0  # Instance variable: created once in __init__
+        self.create_timer(1.0, self.timer_callback)
+    
+    def timer_callback(self):
+        self.log_count += 1  # Each call increments the same variable
+        self.get_logger().warning("Aaila Jaadu... " + str(self.log_count))
+```
+
+### Why Use Instance Variables?
+
+Instance variables let you **keep state** across multiple function calls. Without them, every time `timer_callback()` was called, there would be no way to remember how many times it had been called before.
+
+### The Flow
+
+1. `__init__` runs once when the node is created: `self.log_count = 0`.
+2. The timer fires at 1 second: `timer_callback()` runs, increments `log_count` to 1, logs "Aaila Jaadu... 1".
+3. The timer fires at 2 seconds: `timer_callback()` runs again, increments `log_count` to 2, logs "Aaila Jaadu... 2".
+4. This repeats every second until the node shuts down.
+
+The key is that `self.log_count` is not reset between calls—it persists because it belongs to the `node` object, and the `node` object stays alive as long as `rclpy.spin()` is running.
+
+### Instance vs Class Variables
+
+- **Instance variable** (`self.log_count`): Each object has its own copy. Different nodes would have different counts.
+- **Class variable** (defined outside `__init__` in the class body): Shared by all instances of the class.
+
+For this demo, `self.log_count` is correct because each node should track its own count.
