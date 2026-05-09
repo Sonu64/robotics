@@ -28,4 +28,4 @@ source install/setup.bash
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+No License required for now as this is a Learning Project.
