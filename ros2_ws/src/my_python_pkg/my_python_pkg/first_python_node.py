@@ -15,7 +15,7 @@ class MyNode(Node):
         # Only the parent Node class (from rclpy) has the actual logic to register 
         # the node name in ROS 2. MyNode just extends Node with custom behavior (like logging).
         super().__init__(node_name)
-        self.get_logger().info("Magic Sensor node initialized.")
+        self.get_logger().info("Testing Python node initialized.")
         self.log_count = 0 # This is not a class level counter...its normal counter just to keep track of how many times the printing of the warning log was done.
         # create_timer(period, callback) creates a recurring timer.
         # period=1.0 means the timer fires every 1 second.
@@ -28,11 +28,13 @@ class MyNode(Node):
         # The ROS 2 spin() loop automatically invokes this callback on schedule.
         self.log_count += 1
         self.get_logger().warning("Aaila Jaadu... " + str(self.log_count))
+        self.__getattribute__("get_logger")().error("This is an error log from the timer callback.")
+        self.get_logger().info("This is an info log from the timer callback.")
 
 
 def main(args=None):
     rclpy.init(args = args)
-    node = MyNode("magic_sensor_node")
+    node = MyNode("testing_python_node")
     rclpy.spin(node)
     rclpy.shutdown()
 
