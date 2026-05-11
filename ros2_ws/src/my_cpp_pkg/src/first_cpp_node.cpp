@@ -13,6 +13,7 @@ class MyNode : public rclcpp::Node {
                     std::chrono::seconds(1), 
                     std::bind(&MyNode::timer_callback, this)
                 );
+        // In previous C++ tutorials, you rarely see a function inside a class being called using the `std::bind` method. This is because in those tutorials, the functions were usually called directly from the main function or from other functions within the same class, where the context of the class instance was clear. However, in this case, we are passing the `timer_callback` function as a callback to the timer, which is a separate entity that does not have direct access to the class instance. Therefore, we need to use `std::bind` to explicitly bind the function to the current instance of the class (using `this`) so that when the timer calls the callback, it knows which instance of `MyNode` to operate on.
         }
 
     private:
