@@ -93,10 +93,36 @@ Publisher count: 1
 Subscription count: 0
 
 $ ros2 topic echo /robot_news
-data: Did you hear? Sonu just opened a bakery today!
+data: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeeling :)
 ---
-data: Did you hear? Sonu just opened a bakery today!
+data: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeeling :)
 ---
 ```
 
 > Note: `ros2 topic echo` itself acts as a temporary subscriber in the terminal. You can still build a dedicated subscriber node when you want to process data programmatically.
+
+
+### Dynamic Robot Name and f-strings
+
+- **`self.robot_name_`**: The publisher now sets `self.robot_name_ = "Robo Anchor"` in `__init__`. That value is inserted into each outgoing message so the same node can identify the source robot dynamically.
+
+- **How it's used**: The code constructs the message with an f-string:
+
+```py
+msg.data = f"Breaking News from {self.robot_name_}! Sonu just opened a Bakery today in Darjeeling :)"
+```
+
+- **Comment correction**: The code comment mentioning "backticks" is misleading — Python f-strings use the `f"..."` prefix and normal double/single quotes, not backticks. Backticks are not used in modern Python for string interpolation.
+
+- **How to change the robot name**:
+	- Edit the assignment in the class: `self.robot_name_ = "New Name"`.
+	- Or extend the node to accept a parameter/command-line argument and set `self.robot_name_` from that value for runtime configurability.
+
+- **Updated CLI output**: When `self.robot_name_` is `Robo Anchor`, `ros2 topic echo /robot_news` will show messages like:
+
+```text
+data: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeeling :)
+---
+```
+
+This makes log lines and terminal echoes more informative when multiple publishers exist (each can embed a unique source name inside the message).
