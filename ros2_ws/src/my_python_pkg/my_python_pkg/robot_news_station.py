@@ -7,6 +7,7 @@ from example_interfaces.msg import String
 class RobotNewsStationNode(Node): 
     def __init__(self):
         super().__init__("robot_news_station")
+        self.robot_name_ = "Robo Anchor"
         #....Create the Publisher object. It will publish messages of type String on the topic "news". <Keep in mind that 'where' we are creating the publiser. It's after the super() call.>
 
         # Add dependency in package.xml for example_interfaces to get example_interfaces.msg import String.
@@ -22,7 +23,7 @@ class RobotNewsStationNode(Node):
 
     def publish_news(self):
         msg = String()
-        msg.data = "Did you hear? Sonu just opened a bakery today!" #because the interface String has a field type named "data" which is of string type
+        msg.data = f"Breaking News from {self.robot_name_}! Sonu just opened a Bakery today in Darjeeling :) " # We are using backticks to create a string literal that can include expressions.
         self.publisher_.publish(msg)
 
  
