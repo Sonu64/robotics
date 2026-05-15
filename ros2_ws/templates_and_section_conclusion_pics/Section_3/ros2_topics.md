@@ -126,3 +126,80 @@ data: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeel
 ```
 
 This makes log lines and terminal echoes more informative when multiple publishers exist (each can embed a unique source name inside the message).
+
+## Creating a Python Subscriber
+
+This section explains how the Python subscriber in `smartphone.py` is built, and clarifies the intent of the inline comments in that file.
+
+### How The Subscriber Is Made
+
+1. **Create a ROS 2 node class**
+	 - The class inherits from `Node` and calls `super().__init__("smartphone")`.
+	 - This initializes the node with the name `"smartphone"` in the ROS 2 network.
+
+2. **Create the subscriber object**
+	 - `self.subscriber_ = self.create_subscription(String, "robot_news", self.robot_news_callback, 10)`
+	 - `String`: message type (`example_interfaces/msg/String`)
+	 - `"robot_news"`: topic name to listen on (must match the publisher's topic name)
+	 - `self.robot_news_callback`: callback function that runs when a message arrives
+	 - `10`: queue depth (buffer size for incoming messages)
+
+3. **Define the callback function**
+	 - `robot_news_callback(self, msg: String)` is automatically invoked whenever a message is published on `"robot_news"`.
+	 - The `msg` parameter contains the received message (type `String`).
+	 - Use `msg.data` to access the string content from the publisher.
+
+4. **Initialize and spin the node**
+	 - In `main()`, initialize ROS 2 with `rclpy.init(args=args)`.
+	 - Create the subscriber node: `node = SmartphoneNode()`.
+	 - Run `rclpy.spin(node)` to keep the node alive and processing incoming messages.
+	 - Call `rclpy.shutdown()` to clean up when the node exits.
+
+### Comment Clarification (Important)
+
+- **"create_subscription ... robot_news_callback will be called with the message"**
+	- Correct intent: Whenever the publisher sends a message on `"robot_news"`, ROS 2 automatically calls `robot_news_callback()` with that message. This is the **event-driven** pattern.
+
+- **"msg.publisher_name is not a standard field"**
+	- Correct intent: The `String` message type from `example_interfaces` only has a single `data` field (which holds the text). There is no built-in `publisher_name` field, so `msg.publisher_name` will cause an error if you try to access it.
+	- **Solution**: If you need to know the publisher's identity, either:
+		- Embed the name inside the message data (as the publisher does with the f-string `f"Breaking News from {self.robot_name_}!..."`).
+		- Use a custom message type that includes both data and publisher information.
+
+- **"Queue depth 10"**
+	- Correct intent: If the subscriber's callback function is slow or busy, up to 10 incoming messages can be queued. After that, old messages are dropped. This is QoS (Quality of Service) behavior.
+
+### Typical Output When Running
+
+When you run both the publisher (`robot_news_station.py`) and the subscriber (`smartphone.py`):
+
+```bash
+# Terminal 1: Run the publisher
+ros2 run my_python_pkg robot_news_station
+
+# Terminal 2: Run the subscriber
+ros2 run my_python_pkg smartphone
+```
+
+You will see logs like:
+
+```text
+[smartphone-1] [INFO] [rclpy]: Smartphone is Ready to Use...
+[smartphone-1] [INFO] [smartphone]: Smartphone received news: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeeling :) from Publisher
+[smartphone-1] [INFO] [smartphone]: Smartphone received news: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeeling :) from Publisher
+```
+
+The messages repeat every 2 seconds because the publisher has a 2-second timer.
+
+### Key Differences: Publisher vs. Subscriber
+
+| Aspect | Publisher | Subscriber |
+|--------|-----------|-----------|
+| **Method** | `create_publisher()` | `create_subscription()` |
+| **Message Flow** | Sends data out | Receives data in |
+| **Timing** | Uses a timer for periodic publishing | Uses a callback for event-driven processing |
+| **Role** | Speaker | Listener |
+
+---
+
+> **Congrats!** 🎉 You've taken another step in your robotics journey! Now your nodes talk with each other. One speaks, the other listens... And the same nodes can be Pubs/Subs for other topics simultaneously. One Node can be a Publisher AND a Subscriber at the same time! This is the power of ROS 2's decoupled architecture—nodes communicate via topics without knowing each other directly.
