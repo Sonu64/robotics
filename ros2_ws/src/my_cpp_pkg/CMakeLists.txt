@@ -8,6 +8,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(example_interfaces REQUIRED)
 
 
 ### ------- TESTING code removed ------- ###
@@ -15,12 +16,19 @@ find_package(rclcpp REQUIRED)
 
 
 # Adding executables
+
+# the demo node that we created in Section 1
 add_executable(cpp_node src/first_cpp_node.cpp) # No commas here !!!
 ament_target_dependencies(cpp_node rclcpp)
+
+# The C++ Publisher Node that we created in Section 2, 1st we add the executable, then we link the dependencies. We have to link the example_interfaces package as well, because we are using the String message type from that package.
+add_executable(robot_news_station src/robot_news_station.cpp)
+ament_target_dependencies(robot_news_station rclcpp example_interfaces)
 
 #installing executables for ros2
 install(TARGETS
   cpp_node
+  robot_news_station # Dont forget to add the new node here as well, otherwise it won't be installed and you won't be able to run it using ros2 run command.
   DESTINATION lib/${PROJECT_NAME}
 )
 
