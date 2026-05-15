@@ -23,6 +23,7 @@ class RobotNewsStationNode(Node):
 
     def publish_news(self):
         msg = String()
+        # msg.
         msg.data = f"Breaking News from {self.robot_name_}! Sonu just opened a Bakery today in Darjeeling :) " # We are using backticks to create a string literal that can include expressions.
         self.publisher_.publish(msg)
 
