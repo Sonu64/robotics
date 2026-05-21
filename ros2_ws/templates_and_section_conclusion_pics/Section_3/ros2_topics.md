@@ -123,6 +123,63 @@ What the `Type` tells us
 
 > Note: `ros2 topic echo` itself acts as a temporary subscriber in the terminal. You can still build a dedicated subscriber node when you want to process data programmatically.
 
+### Measuring Topic Frequency: `ros2 topic hz`
+
+- Use `ros2 topic hz /topicName` to measure how frequently messages are being published on a topic.
+	- Example for this document: `ros2 topic hz /robot_news`
+- The command prints the average frequency in Hertz (messages per second) and the equivalent period in seconds (time between messages).
+- Typical output looks like:
+
+```text
+subscribed to [ /robot_news ]
+average rate: 0.50 Hz
+average period: 2.000 s
+min: 2.000s max: 2.000s std dev: 0.00000s window: 10
+```
+
+- Interpretation:
+	- `average rate` is how many messages per second the node observed (Hz).
+	- `average period` is the inverse (seconds between messages). In this example the publisher sends one message every 2 seconds (0.5 Hz).
+
+- Use this to verify timers and expected publish rates, and to spot problems like unexpectedly slow publishers or noisy timing.
+
+
+### Measuring Topic Bandwidth: `ros2 topic bw`
+
+- Use `ros2 topic bw /topicName` to measure the data throughput on a topic (bandwidth).
+	- Example for this document: `ros2 topic bw /robot_news`
+- The command reports the observed bandwidth (bytes/sec or KB/s), average message size, and the message rate (Hz). This helps estimate the data load of a topic and whether network or processing limits might be hit.
+- Typical output (illustrative):
+
+```text
+subscribed to [ /robot_news ]
+average bandwidth: 0.10 KB/s
+average message size: 20 B
+average rate: 0.50 Hz
+min: 0.50Hz max: 0.50Hz std dev: 0.00000Hz window: 10
+```
+
+- Interpretation:
+	- `average bandwidth` is the data throughput observed on the topic (bytes per second).
+	- `average message size` helps you understand how heavy each message is.
+	- Combine bandwidth and frequency to reason about total network usage (bandwidth ≈ message_size × rate).
+
+- Use `ros2 topic bw` when profiling and optimizing communication, or when choosing serialization/compression or appropriate QoS settings.
+
+
+### Temporary Publisher from the CLI: `ros2 topic pub`
+
+- You can publish test messages directly from the shell with `ros2 topic pub`.
+- Corrected example (publish at 1 Hz to `/robot_news` using `example_interfaces/msg/String`):
+
+```bash
+ros2 topic pub -r 1 /robot_news example_interfaces/msg/String '{data: "A Temporary publisher is currently publishing in the topic, but it is not possible to do this for complex types like arrays, classes or nested subtypes."}'
+```
+
+- Notes:
+	- Use `--once` to publish a single message instead of a repeated rate: `ros2 topic pub --once /robot_news example_interfaces/msg/String '{data: "one-off"}'`.
+	- For complex message fields (arrays, nested messages), provide valid YAML/JSON and be careful with shell quoting. Example array: `'{arr: [1, 2, 3]}'`.
+	- Some complex ROS 2 types are cumbersome to construct on the CLI; for those, write a short node in Python or C++ to publish reliable test messages.
 
 ### Dynamic Robot Name and f-strings
 
