@@ -200,6 +200,19 @@ The messages repeat every 2 seconds because the publisher has a 2-second timer.
 | **Timing** | Uses a timer for periodic publishing | Uses a callback for event-driven processing |
 | **Role** | Speaker | Listener |
 
+### Python vs. C++ Topic Syntax
+
+- In Python, you can usually set up a member in one line inside the constructor, like `self.var_name = value`.
+- In C++, the structure is split more explicitly: member declarations are kept in the class, usually under `private:`, and the constructor is defined separately in the `.cpp` file.
+- For ROS 2 pub/sub code, the main idea is the same in both languages: create the node, create the publisher or subscriber, and use the callback or timer to move data.
+
+### ROS 2 Is Language Agnostic
+
+- ROS 2 topics do not care whether a node is written in Python or C++.
+- A Python publisher can communicate with a C++ subscriber.
+- A C++ publisher can communicate with a Python subscriber.
+- What matters is the topic name and the message type matching on both sides.
+
 ---
 
 > **Congrats!** 🎉 You've taken another step in your robotics journey! Now your nodes talk with each other. One speaks, the other listens... And the same nodes can be Pubs/Subs for other topics simultaneously. One Node can be a Publisher AND a Subscriber at the same time! This is the power of ROS 2's decoupled architecture—nodes communicate via topics without knowing each other directly.
