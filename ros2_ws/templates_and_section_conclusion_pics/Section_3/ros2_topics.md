@@ -99,6 +99,28 @@ data: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeel
 ---
 ```
 
+### Introspecting Topics with the ROS 2 CLI
+
+- `ros2 topic list`
+	- Lists all active topic names on the ROS 2 network.
+
+- `ros2 topic info /topic_name`
+	- Shows summary information about the topic, including the `Type:` line (for example `example_interfaces/msg/String`), publisher and subscription counts, and basic QoS details.
+	- Copy the value shown after `Type:` and call it `typeName` for the next step.
+
+- `ros2 interface show typeName`
+	- Example: `ros2 interface show example_interfaces/msg/String`
+	- Prints the full message/interface definition (fields and their types). Use this to see what data the topic carries and the exact field names you should access in code.
+
+What the `Type` tells us
+
+- The `Type` is the message interface (schema) used on the topic. It defines the fields and their types that publishers put on the topic and that subscribers receive.
+- Publishers must publish messages that conform to that interface, and subscribers expect the same interface to deserialize and access fields correctly.
+- In practice this means the subscriber code should use the same message type (for example, `example_interfaces::msg::String` in C++ or `example_interfaces.msg.String` in Python) so the message fields line up exactly.
+- ROS 2 is language agnostic: as long as both sides use the same message/interface definition, a Python publisher will connect to a C++ subscriber and vice‑versa.
+
+> Tip: If `ros2 topic info` shows a different type than you expect, double‑check the publisher node and the package dependencies (e.g., `example_interfaces`) to ensure both sides use the same interface.
+
 > Note: `ros2 topic echo` itself acts as a temporary subscriber in the terminal. You can still build a dedicated subscriber node when you want to process data programmatically.
 
 
