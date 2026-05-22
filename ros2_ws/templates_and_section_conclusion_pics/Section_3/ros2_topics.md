@@ -292,6 +292,30 @@ The messages repeat every 2 seconds because the publisher has a 2-second timer.
 - A C++ publisher can communicate with a Python subscriber.
 - What matters is the topic name and the message type matching on both sides.
 
+### Renaming Topics at Runtime
+
+You can rename a topic when launching a node by using a ROS 2 remap rule. This is useful when you want the same code to publish or subscribe to a different topic name without changing the source file.
+
+Example for the publisher side:
+
+```bash
+ros2 run my_cpp_pkg robot_news_station --ros-args -r robot_news:=NewRobotNews
+```
+
+In this command, the publisher originally creates `robot_news`, but ROS 2 remaps it to `NewRobotNews` at runtime.
+
+Important: the subscriber must use the same remapped topic name too. If the publisher is remapped to `NewRobotNews` but the subscriber still listens on `robot_news`, they will no longer connect, so you will get no output.
+
+Example for the subscriber side:
+
+```bash
+ros2 run my_cpp_pkg smartphone --ros-args -r robot_news:=NewRobotNews
+```
+
+Now both nodes are talking on the same runtime topic name, so messages flow normally again.
+
+You can think of this as changing the topic label at launch time instead of editing the code. The message type stays the same, but the name used to connect the nodes changes.
+
 ---
 
 > **Congrats!** 🎉 You've taken another step in your robotics journey! Now your nodes talk with each other. One speaks, the other listens... And the same nodes can be Pubs/Subs for other topics simultaneously. One Node can be a Publisher AND a Subscriber at the same time! This is the power of ROS 2's decoupled architecture—nodes communicate via topics without knowing each other directly.
