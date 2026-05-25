@@ -183,6 +183,21 @@ ros2 topic pub -r 1 /robot_news example_interfaces/msg/String '{data: "A Tempora
 
 ### Dynamic Robot Name and f-strings
 
+
+	## Turtle Sim Exploration
+
+	Use the CLI to drive the `turtlesim` turtle with a temporary publisher. Run `turtlesim_node` first (for example: `ros2 run turtlesim turtlesim_node`), then publish Twist messages to `/turtle1/cmd_vel` to move the turtle.
+
+	Example (publish at 2 Hz):
+
+	```bash
+	ros2 topic pub -r 2 /turtle1/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0}, angular: {z: 1.0}}"
+	```
+
+	- **What this does:** Publishes a `geometry_msgs/msg/Twist` message repeatedly at 2 Hz to the `/turtle1/cmd_vel` topic. The `linear.x: 1.0` makes the turtle move forward, and `angular.z: 1.0` makes it rotate while moving, resulting in a curved/spiral motion.
+	- **Usage notes:** Ensure `turtlesim_node` is running and that the topic name matches the simulator (`/turtle1/cmd_vel`). Use `ros2 topic echo /turtle1/cmd_vel` to inspect the live messages, and `ros2 topic hz /turtle1/cmd_vel` to verify publishing rate.
+
+
 - **`self.robot_name_`**: The publisher now sets `self.robot_name_ = "Robo Anchor"` in `__init__`. That value is inserted into each outgoing message so the same node can identify the source robot dynamically.
 
 - **How it's used**: The code constructs the message with an f-string:
