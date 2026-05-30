@@ -17,29 +17,30 @@ class NumberCounterNode : public rclcpp::Node {
 
         this->publisher_ = this->create_publisher<Integer64>("number_count", 10);
 
-        this->timer_ = this->create_wall_timer(1s, std::bind(&NumberCounterNode::publish_number_callback, this));
 
         RCLCPP_WARN(this->get_logger(), "Number Counter has started Listening to /number and Simultaneosly publishing to the /number_count");
 
         }
 
     private:
+        int64_t number_received_;
         int64_t number_count_;
+
         rclcpp::Subscription<Integer64>::SharedPtr subscriber_;
          rclcpp::Publisher<Integer64>::SharedPtr publisher_;
-        rclcpp::TimerBase::SharedPtr timer_;
+      
 
         void get_number_callback(const Integer64::SharedPtr msg) {
-            number_count_ = msg->data; // Update the count with the received number
-            RCLCPP_WARN(this->get_logger(), "Received number: %ld", number_count_);
-        }
+            number_received_ = msg->data; // Update the count with the received number
+            number_count_++; // Increment the count of numbers received
 
-        void publish_number_callback() {
-            auto msg = Integer64();
-            msg.data  = number_count_; // Publish the count of numbers received
-            this->publisher_->publish(msg);
-        }
+            RCLCPP_ERROR(this->get_logger(), "Number of numbers received: %ld", number_count_);
+            RCLCPP_WARN(this->get_logger(), "Received number: %ld \n\n", number_received_);
 
+            auto number_count_msg = Integer64(); // construction of this msg as an entire Integer64 is needed to publish the count of numbers received, you cant directly use msg as it contains the received number, not the count of numbers received
+            number_count_msg.data = number_count_;
+            this->publisher_->publish(number_count_msg); // Publish the count of numbers received
+        }
         
     };
 
