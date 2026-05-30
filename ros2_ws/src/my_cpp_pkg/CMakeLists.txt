@@ -25,10 +25,12 @@ ament_target_dependencies(cpp_node rclcpp)
 add_executable(robot_news_station src/robot_news_station.cpp)
 add_executable(smartphone src/smartphone.cpp)
 add_executable(number_publisher src/number_publisher.cpp) 
+add_executable(number_counter src/number_counter.cpp) # Don't forget to add the new node here as well, otherwise it won't be built and you won't be able to run it using ros2 run command.
 # Don't forget to add the new node here as well, otherwise it won't be built and you won't be able to run it using ros2 run command.
 ament_target_dependencies(robot_news_station rclcpp example_interfaces)
 ament_target_dependencies(smartphone rclcpp example_interfaces)
 ament_target_dependencies(number_publisher rclcpp example_interfaces)
+ament_target_dependencies(number_counter rclcpp example_interfaces) 
 
 #installing executables for ros2
 install(TARGETS
@@ -36,6 +38,7 @@ install(TARGETS
   robot_news_station
   smartphone
   number_publisher
+  number_counter # Don't forget to add the new node here as well, otherwise it won't be installed and you won't be able to run it using ros2 run command.
   DESTINATION lib/${PROJECT_NAME}
 )
 
