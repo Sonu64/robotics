@@ -27,7 +27,7 @@ class NumberCounterNode : public rclcpp::Node {
         int64_t number_count_;
 
         rclcpp::Subscription<Integer64>::SharedPtr subscriber_;
-         rclcpp::Publisher<Integer64>::SharedPtr publisher_;
+        rclcpp::Publisher<Integer64>::SharedPtr publisher_;
       
 
         void get_number_callback(const Integer64::SharedPtr msg) {
