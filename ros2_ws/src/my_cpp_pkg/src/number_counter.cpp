@@ -37,6 +37,8 @@ class NumberCounterNode : public rclcpp::Node {
             RCLCPP_ERROR(this->get_logger(), "Number of numbers received: %ld", number_count_);
             RCLCPP_WARN(this->get_logger(), "Received number: %ld \n\n", number_received_);
 
+            // Create a new message to publish the count of numbers received. This is important because you should not modify the original message that was received, as it may cause issues if you try to publish the same message object multiple times. Always create a new message object when publishing.
+            
             auto number_count_msg = Integer64(); // construction of this msg as an entire Integer64 is needed to publish the count of numbers received, you cant directly use msg as it contains the received number, not the count of numbers received
             number_count_msg.data = number_count_;
             this->publisher_->publish(number_count_msg); // Publish the count of numbers received
