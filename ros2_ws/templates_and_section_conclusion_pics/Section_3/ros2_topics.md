@@ -95,9 +95,55 @@ Subscription count: 0
 $ ros2 topic echo /robot_news
 data: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeeling :)
 ---
-data: Breaking News from Robo Anchor! Sonu just opened a Bakery today in Darjeeling :)
----
+
 ```
+
+## Services
+
+### Overview
+
+Services provide a synchronous request/response (RPC-style) communication pattern in ROS 2. A node offers a service (server) and another node calls it (client). Services are ideal for short, deterministic operations that require an immediate reply (for example: adding two numbers, requesting configuration, or commanding a discrete operation that completes quickly).
+
+### Common Commands
+
+```bash
+# List available services
+ros2 service list
+
+# Show information about a service
+ros2 service info /service_name
+
+# Call a service (example: AddTwoInts)
+ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{a: 2, b: 3}"
+
+# Show a service interface definition
+ros2 interface show example_interfaces/srv/AddTwoInts
+```
+
+### When to Use Services
+
+- Request/response workflows where the caller needs a result before proceeding.
+- Configuration or control commands that should execute immediately and return success/failure.
+- Lightweight RPCs where latency is small and blocking behavior is acceptable.
+
+### How Services Differ From Topics and Actions
+
+- Topics: asynchronous, many-to-many pub/sub streams (good for sensor data and broadcasts).
+- Services: synchronous, one-to-one request/response (good for commands and queries).
+- Actions: long-running goals with feedback and cancellation (good for navigation, complex tasks).
+
+### Quick Example (call a simple service)
+
+If a service `/add_two_ints` is available that uses `example_interfaces/srv/AddTwoInts`, call it like this:
+
+```bash
+ros2 service call /add_two_ints example_interfaces/srv/AddTwoInts "{a: 5, b: 7}"
+```
+
+This prints the returned response with the sum.
+
+---
+
 
 ### Introspecting Topics with the ROS 2 CLI
 
@@ -329,8 +375,57 @@ ros2 run my_cpp_pkg smartphone --ros-args -r robot_news:=NewRobotNews
 
 Now both nodes are talking on the same runtime topic name, so messages flow normally again.
 
-You can think of this as changing the topic label at launch time instead of editing the code. The message type stays the same, but the name used to connect the nodes changes.
+## ROS2 Bags
+
+### Overview
+
+`ros2 bag` (rosbag2) lets you record and replay ROS 2 topic traffic for offline analysis, debugging, dataset collection, and replaying scenarios for testing. Recorded bags in modern ROS 2 can use different storage backends (e.g., `sqlite3`, `mcap`) — you'll see files like `*.mcap` or a bag folder with `metadata.yaml` in recorded output.
+
+### Common Commands
+
+```bash
+# Record all topics into a new bag directory named "my_bag"
+ros2 bag record -a -o my_bag
+
+# Record specific topics into a bag
+ros2 bag record -o my_bag /camera/image_raw /tf /odom
+
+# Inspect information about a recorded bag
+ros2 bag info my_bag
+
+# Play back a bag (supports rate, loop, and publishing /clock)
+ros2 bag play my_bag --rate 1.0 --loop --clock
+```
+
+- Use `-a` to record all topics, or list the topics you care about for smaller files.
+- Use `-o <name>` to name the output bag (creates a directory or file depending on storage).
+- Use `-s <storage>` (for example `-s mcap` or `-s sqlite3`) to specify storage backend when recording.
+
+### Why Bags Are Useful
+
+- Reproduce issues: capture sensor and state streams from a failing run and replay them locally to reproduce bugs.
+- Offline analysis: run algorithms (e.g., SLAM, perception) against recorded data without the robot present.
+- Dataset collection: build labeled datasets for machine learning training and evaluation.
+- Integration testing: replay realistic traffic to automated tests, CI, or simulations.
+- Time-shifted debugging: replay with slower/faster `--rate` or step through messages to inspect behavior.
+
+### Tips & Notes
+
+- To inspect which topics were recorded, run `ros2 bag info` and check `metadata.yaml` inside the bag directory.
+- If nodes expect `/clock` during playback (simulators or time‑sensitive nodes), include `--clock` when playing so time-dependent behavior matches the recorded session.
+- When recording high-bandwidth sensors (cameras, lidars), prefer storage backends like `mcap` which are efficient for large sequential data.
+- For long recordings, monitor disk usage and consider splitting or compressing recordings.
+
+### Quick Example
+
+Record two topics and then replay them at half speed while publishing `/clock`:
+
+```bash
+ros2 bag record -o demo_bag /camera/image_raw /tf
+ros2 bag play demo_bag --rate 0.5 --clock
+```
 
 ---
 
-> **Congrats!** 🎉 You've taken another step in your robotics journey! Now your nodes talk with each other. One speaks, the other listens... And the same nodes can be Pubs/Subs for other topics simultaneously. One Node can be a Publisher AND a Subscriber at the same time! This is the power of ROS 2's decoupled architecture—nodes communicate via topics without knowing each other directly.
+> **Congrats!** 🎉 You've taken another step in your robotics journey! Now your nodes talk with each other. One speaks, the other listens... And the same nodes can be Pubs/Subs for other topics simultaneously. One Node can be a Publisher AND a Subscriber at the same time! This is the power of ROS 2's decoupled architecture—nodes communicate via topics without knowing each other directly. Next up: the `Services` section — learn how to perform synchronous request/response interactions (RPC-style) with service servers and clients.
+
