@@ -28,7 +28,8 @@ setup(
             "robot_news_station = my_python_pkg.robot_news_station:main",
             "smartphone = my_python_pkg.smartphone:main"
             ,"number_publisher = my_python_pkg.number_publisher:main",
-            "number_counter = my_python_pkg.number_counter:main"
+            "number_counter = my_python_pkg.number_counter:main",
+            "add_two_ints = my_python_pkg.add_two_ints_server:main",
         ],
     },
 )
