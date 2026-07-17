@@ -6,30 +6,26 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find dependencies
+find_package(example_interfaces REQUIRED)
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
 
+
+# Adding executables
 add_executable(cpp_pub src/cpp_pub.cpp)
-target_include_directories(cpp_pub PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
-target_compile_features(cpp_pub PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+add_executable(cpp_sub src/cpp_sub.cpp)
 
-install(TARGETS cpp_pub
+# Executable dependencies
+ament_target_dependencies(cpp_node rclcpp)
+ament_target_dependencies(cpp_pub rclcpp example_interfaces)
+ament_target_dependencies(cpp_sub rclcpp example_interfaces)
+
+
+install(TARGETS 
+  cpp_pub
+  cpp_sub
   DESTINATION lib/${PROJECT_NAME})
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
+#-----------Removed testing code for simplicity-------------------
 
 ament_package()
