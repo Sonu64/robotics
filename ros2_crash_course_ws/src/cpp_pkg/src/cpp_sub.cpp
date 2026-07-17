@@ -12,7 +12,7 @@ using String = example_interfaces::msg::String;
 class MinimalSubscriber : public rclcpp::Node
 {
 public:
-    MinimalSubscriber() : Node("minimal_subscriber"), count(0)  {
+    MinimalSubscriber() : Node("minimal_subscriber")  {
       subscription_ = this->create_subscription<String>("scribble", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
       RCLCPP_INFO(this->get_logger(), "Minimal C++ Subscriber has  started listening for messages.");
     }
