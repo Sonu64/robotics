@@ -20,7 +20,7 @@ def main(args=None):
     request.b = 20
 
 
-    # Make Asynchronous Call to Server via Client and wait for the response
+    # Make Asynchronous Call to Server via Client and wait for the response to come.
     future = client.call_async(request)
     # Spinning until the future is complete, i.e. until the response is received
     rclpy.spin_until_future_complete(node, future)
