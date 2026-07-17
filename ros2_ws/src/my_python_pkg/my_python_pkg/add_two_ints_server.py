@@ -17,7 +17,6 @@ class AddTwoIntsServerNode(Node):
         # Don't forget to return the response !
         return response
 
-
  
 def main(args=None):
     rclpy.init(args=args)
