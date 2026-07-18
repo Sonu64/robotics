@@ -21,16 +21,19 @@ find_package(example_interfaces REQUIRED)
 add_executable(cpp_node src/first_cpp_node.cpp) # No commas here !!!
 ament_target_dependencies(cpp_node rclcpp)
 
-# The C++ Publisher Node that we created in Section 2, 1st we add the executable, then we link the dependencies. We have to link the example_interfaces package as well, because we are using the String message type from that package.
 add_executable(robot_news_station src/robot_news_station.cpp)
 add_executable(smartphone src/smartphone.cpp)
 add_executable(number_publisher src/number_publisher.cpp) 
-add_executable(number_counter src/number_counter.cpp) # Don't forget to add the new node here as well, otherwise it won't be built and you won't be able to run it using ros2 run command.
+add_executable(number_counter src/number_counter.cpp) 
+add_executable(add_two_ints_server src/add_two_ints_server.cpp)
+
+
 # Don't forget to add the new node here as well, otherwise it won't be built and you won't be able to run it using ros2 run command.
 ament_target_dependencies(robot_news_station rclcpp example_interfaces)
 ament_target_dependencies(smartphone rclcpp example_interfaces)
 ament_target_dependencies(number_publisher rclcpp example_interfaces)
 ament_target_dependencies(number_counter rclcpp example_interfaces) 
+ament_target_dependencies(add_two_ints_server rclcpp example_interfaces)
 
 #installing executables for ros2
 install(TARGETS
@@ -38,7 +41,9 @@ install(TARGETS
   robot_news_station
   smartphone
   number_publisher
-  number_counter # Don't forget to add the new node here as well, otherwise it won't be installed and you won't be able to run it using ros2 run command.
+  number_counter 
+  add_two_ints_server
+  # Don't forget to add the new node here as well, otherwise it won't be installed and you won't be able to run it using ros2 run command.
   DESTINATION lib/${PROJECT_NAME}
 )
 

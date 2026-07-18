@@ -38,6 +38,8 @@ def main(args=None):
     rclpy.init(args=args)
     node = AddTwoIntsClient() 
     node.call_add_two_ints(10, 20)
+    node.call_add_two_ints(30, 40)
+    node.call_add_two_ints(50, 60)
     rclpy.spin(node)
     rclpy.shutdown()
  
