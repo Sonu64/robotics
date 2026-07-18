@@ -26,6 +26,7 @@ add_executable(smartphone src/smartphone.cpp)
 add_executable(number_publisher src/number_publisher.cpp) 
 add_executable(number_counter src/number_counter.cpp) 
 add_executable(add_two_ints_server src/add_two_ints_server.cpp)
+add_executable(add_two_ints_client_no_oop src/add_two_ints_client_no_oop.cpp)
 
 
 # Don't forget to add the new node here as well, otherwise it won't be built and you won't be able to run it using ros2 run command.
@@ -34,6 +35,8 @@ ament_target_dependencies(smartphone rclcpp example_interfaces)
 ament_target_dependencies(number_publisher rclcpp example_interfaces)
 ament_target_dependencies(number_counter rclcpp example_interfaces) 
 ament_target_dependencies(add_two_ints_server rclcpp example_interfaces)
+ament_target_dependencies(add_two_ints_client_no_oop rclcpp example_interfaces)
+
 
 #installing executables for ros2
 install(TARGETS
@@ -43,6 +46,7 @@ install(TARGETS
   number_publisher
   number_counter 
   add_two_ints_server
+  add_two_ints_client_no_oop
   # Don't forget to add the new node here as well, otherwise it won't be installed and you won't be able to run it using ros2 run command.
   DESTINATION lib/${PROJECT_NAME}
 )
