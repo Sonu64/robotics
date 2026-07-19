@@ -2,6 +2,7 @@
 #include "example_interfaces/msg/int64.hpp"
 #include <chrono>
 
+
 using namespace std::chrono_literals;
 
 // Type alias for the Int64 message
@@ -13,12 +14,16 @@ public:
         publisher_ = this->create_publisher<Integer64>("number", 10);
         timer_ = this->create_wall_timer(1s, std::bind(&NumberPublisherNode::publish_number, this));
         RCLCPP_WARN(this->get_logger(), "Number Publisher Node has started publishing numbers...");
+
+        
     }
 private:
     rclcpp::Publisher<Integer64>::SharedPtr publisher_;
+    
     int64_t count_;
     rclcpp::TimerBase::SharedPtr timer_;
     
+    // Callback of timer to publish number
     void publish_number() {
         auto msg = Integer64();
         msg.data = count_;
@@ -26,7 +31,9 @@ private:
         // remember that publisher_ is a Shared Pointer, so we use the -> operator to call the publish method on it.
         this->publisher_->publish(msg);
     }
-};
+
+    
+ };
  
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv);

@@ -1,6 +1,7 @@
 // this will act as Subscriber to the topic published by number_publisher.cpp and Publiish the count of numbers received to another topic called "number_count"
 #include "rclcpp/rclcpp.hpp"
 #include "example_interfaces/msg/int64.hpp"
+#include "example_interfaces/srv/set_bool.hpp"
 
 using namespace std::chrono_literals;
 using namespace std::placeholders; 
@@ -17,6 +18,9 @@ class NumberCounterNode : public rclcpp::Node {
 
         this->publisher_ = this->create_publisher<Integer64>("number_count", 10);
 
+        // assigning server to service
+        server_ = this->create_service<example_interfaces::srv::SetBool>("reset_counter", std::bind(&NumberCounterNode::handle_reset_counter, this, std::placeholders::_1, std::placeholders::_2));
+
 
         RCLCPP_WARN(this->get_logger(), "Number Counter has started Listening to /number and Simultaneosly publishing to the /number_count");
 
@@ -25,7 +29,8 @@ class NumberCounterNode : public rclcpp::Node {
     private:
         int64_t number_received_;
         int64_t number_count_;
-
+        
+        rclcpp::Service<example_interfaces::srv::SetBool>::SharedPtr server_; //decl service
         rclcpp::Subscription<Integer64>::SharedPtr subscriber_;
         rclcpp::Publisher<Integer64>::SharedPtr publisher_;
       
@@ -43,6 +48,19 @@ class NumberCounterNode : public rclcpp::Node {
             number_count_msg.data = number_count_;
             this->publisher_->publish(number_count_msg); // Publish the count of numbers received
         }
+
+
+        // Callback of service to handle the request
+    void handle_reset_counter(const std::shared_ptr<example_interfaces::srv::SetBool::Request> request, std::shared_ptr<example_interfaces::srv::SetBool::Response> response) {
+        if (request->data == true) {
+            number_count_ = 0; // reset count to 0
+            response->success = true;
+            response->message = "Count has been reset to 0.";
+        } else {
+            response->success = false;
+            response->message = "Failed to reset count.";
+        }
+    }
         
     };
 

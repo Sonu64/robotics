@@ -29,7 +29,6 @@ add_executable(add_two_ints_server src/add_two_ints_server.cpp)
 add_executable(add_two_ints_client_no_oop src/add_two_ints_client_no_oop.cpp)
 add_executable(add_two_ints_client src/add_two_ints_client.cpp)
 
-
 # Don't forget to add the new node here as well, otherwise it won't be built and you won't be able to run it using ros2 run command.
 ament_target_dependencies(robot_news_station rclcpp example_interfaces)
 ament_target_dependencies(smartphone rclcpp example_interfaces)
