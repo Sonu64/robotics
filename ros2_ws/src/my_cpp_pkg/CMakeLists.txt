@@ -9,9 +9,9 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(example_interfaces REQUIRED)
+find_package(my_robot_interfaces REQUIRED)
 
-
-### ------- TESTING code removed ------- ###
+### ------- TESTING code removed ------- 
 
 
 
@@ -28,6 +28,7 @@ add_executable(number_counter src/number_counter.cpp)
 add_executable(add_two_ints_server src/add_two_ints_server.cpp)
 add_executable(add_two_ints_client_no_oop src/add_two_ints_client_no_oop.cpp)
 add_executable(add_two_ints_client src/add_two_ints_client.cpp)
+add_executable(hardware_status_publisher src/hardware_status_publisher.cpp)
 
 # Don't forget to add the new node here as well, otherwise it won't be built and you won't be able to run it using ros2 run command.
 ament_target_dependencies(robot_news_station rclcpp example_interfaces)
@@ -37,6 +38,7 @@ ament_target_dependencies(number_counter rclcpp example_interfaces)
 ament_target_dependencies(add_two_ints_server rclcpp example_interfaces)
 ament_target_dependencies(add_two_ints_client_no_oop rclcpp example_interfaces)
 ament_target_dependencies(add_two_ints_client rclcpp example_interfaces)
+ament_target_dependencies(hardware_status_publisher rclcpp my_robot_interfaces)
 
 
 #installing executables for ros2
@@ -49,6 +51,7 @@ install(TARGETS
   add_two_ints_server
   add_two_ints_client_no_oop
   add_two_ints_client
+  hardware_status_publisher
   # Don't forget to add the new node here as well, otherwise it won't be installed and you won't be able to run it using ros2 run command.
   DESTINATION lib/${PROJECT_NAME}
 )
