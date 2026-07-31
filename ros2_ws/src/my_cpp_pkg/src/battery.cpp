@@ -45,7 +45,7 @@ public:
         void call_set_led(int64_t led_number, bool state) {
             // Wait for the service to be available if no service found after 1sec.
             while (!client_->wait_for_service(std::chrono::seconds(1))) {
-                if (!rclcpp::ok()) {  // <-- add this check
+                if (!rclcpp::ok()) {  // <-- add this check, otherwise Ctrl+C wont close the node properly.
             RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for service. Exiting.");
             return;
         }
