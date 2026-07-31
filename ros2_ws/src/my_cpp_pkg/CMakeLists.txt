@@ -29,6 +29,8 @@ add_executable(add_two_ints_server src/add_two_ints_server.cpp)
 add_executable(add_two_ints_client_no_oop src/add_two_ints_client_no_oop.cpp)
 add_executable(add_two_ints_client src/add_two_ints_client.cpp)
 add_executable(hardware_status_publisher src/hardware_status_publisher.cpp)
+add_executable(battery src/battery.cpp)
+add_executable(led_panel_server src/led_panel.cpp)
 
 # Don't forget to add the new node here as well, otherwise it won't be built and you won't be able to run it using ros2 run command.
 ament_target_dependencies(robot_news_station rclcpp example_interfaces)
@@ -39,6 +41,8 @@ ament_target_dependencies(add_two_ints_server rclcpp example_interfaces)
 ament_target_dependencies(add_two_ints_client_no_oop rclcpp example_interfaces)
 ament_target_dependencies(add_two_ints_client rclcpp example_interfaces)
 ament_target_dependencies(hardware_status_publisher rclcpp my_robot_interfaces)
+ament_target_dependencies(battery rclcpp my_robot_interfaces)
+ament_target_dependencies(led_panel_server rclcpp my_robot_interfaces)
 
 
 #installing executables for ros2
@@ -52,6 +56,8 @@ install(TARGETS
   add_two_ints_client_no_oop
   add_two_ints_client
   hardware_status_publisher
+  battery
+  led_panel_server
   # Don't forget to add the new node here as well, otherwise it won't be installed and you won't be able to run it using ros2 run command.
   DESTINATION lib/${PROJECT_NAME}
 )

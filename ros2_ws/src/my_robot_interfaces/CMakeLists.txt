@@ -17,7 +17,9 @@ find_package(rosidl_default_generators REQUIRED)
 # No COMMA below !!
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/HardwareStatus.msg"
+  "msg/LedPanelState.msg"
   "srv/ComputeRectangleArea.srv"
+  "srv/SetLed.srv"
 )
 ament_export_dependencies(rosidl_default_runtime)
 
