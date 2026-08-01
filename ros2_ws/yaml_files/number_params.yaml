@@ -1,0 +1,9 @@
+/number_publisher:
+  ros__parameters:
+    count: -500
+    timer_period: 1.0
+
+/number_publisher_again:
+  ros__parameters:
+    count: 900
+    timer_period: 0.345
