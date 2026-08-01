@@ -18,7 +18,13 @@ using String = example_interfaces::msg::String; // This is just a type alias to 
 class RobotNewsStationNode : public rclcpp::Node
 {
 public:
-    RobotNewsStationNode() : Node("robot_news_station"), robot_name_("Sonu_Bot_News_Anchor") {
+    RobotNewsStationNode() : Node("robot_news_station")  {
+
+        // declare param for the robot name, and set a default value of "Sonu"
+        this->declare_parameter("robot_name", "Sonu");
+        // get the value of the robot name parameter, and store it in the robot_name_
+        robot_name_ = this->get_parameter("robot_name").as_string();
+
         publisher_ = this->create_publisher<String>("robot_news", 10);
         // this entire expression returns a Shared Pointer, that we store in the Shared Pointer we made, i.e-> publisher_
         timer_ = this->create_wall_timer( 1s, std::bind(&RobotNewsStationNode::publish_news, this));

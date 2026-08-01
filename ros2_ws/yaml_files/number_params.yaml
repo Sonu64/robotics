@@ -7,3 +7,7 @@
   ros__parameters:
     count: 900
     timer_period: 0.345
+
+/robot_news_station:
+  ros__parameters:
+    robot_name: "Just a name outta nowhere !"
