@@ -5,6 +5,12 @@
 class LedPanelNode : public rclcpp::Node {
     public:
         LedPanelNode() : Node("led_panel_server")  {
+
+            // declare a parameter for the LED states, and set a default value of [0, 0, 0]
+            this->declare_parameter("led_states", std::vector<int64_t>{0, 0, 0});
+            // get the parameter value and store it in the member variable
+            led_states_ = this->get_parameter("led_states").as_integer_array();
+
             server_ = this->create_service<my_robot_interfaces::srv::SetLed>("set_led", std::bind(&LedPanelNode::callbackSetLed, this, std::placeholders::_1, std::placeholders::_2));
             RCLCPP_INFO(this->get_logger(), "LED Panel Service Server is running. Waiting for requests...");
             led_panel_state_pub_ = this->create_publisher<my_robot_interfaces::msg::LedPanelState>("led_panel_state", 10);
@@ -13,6 +19,8 @@ class LedPanelNode : public rclcpp::Node {
     private:
         rclcpp::Service<my_robot_interfaces::srv::SetLed>::SharedPtr server_;
         rclcpp::Publisher<my_robot_interfaces::msg::LedPanelState>::SharedPtr led_panel_state_pub_;
+        std::vector<int64_t> led_states_;  // <-- new member, this is now your source of truth coming from the YAML param file.
+
         
         void callbackSetLed(const my_robot_interfaces::srv::SetLed::Request::SharedPtr request, my_robot_interfaces::srv::SetLed::Response::SharedPtr response) {
             int led_number = request->led_number;
