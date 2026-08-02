@@ -1,1 +1,1 @@
-int32[3] led_panel_state
+int32[] led_panel_state
