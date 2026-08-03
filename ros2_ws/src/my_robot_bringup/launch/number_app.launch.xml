@@ -1,4 +1,8 @@
 <launch>
-    <node pkg="my_python_pkg" exec="number_publisher" />
-    <node pkg="my_cpp_pkg" exec="number_counter" />
+    <node pkg="my_python_pkg" exec="number_publisher" name="renamed_number_publisher"> <!-- Renaming node name using name attribute -->
+      <remap from="/number" to="/renamed_number"/> <!-- Renaming topic name using remap tag inside node tag -->
+    </node>
+    <node pkg="my_cpp_pkg" exec="number_counter" name="renamed_number_counter">
+        <remap from="/number" to="/renamed_number"/>
+    </node>
 </launch>
