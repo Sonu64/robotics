@@ -34,7 +34,7 @@ private:
   int64_t count_;
   double timer_period_;
   rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::node_interfaces::NodeParametersInterface::OnSetParametersCallbackHandle::SharedPtr
+  rclcpp::node_interfaces::PostSetParametersCallbackHandle::SharedPtr
     param_callback_handle_;
   int number_{}; // the {} is used to initialize the default value of the variable to 0. Nothing else. Undefined vars may led to unpredictable behavior in C++. So using {} is a good practice to avoid that.
  
