@@ -1,8 +1,16 @@
 <launch>
-    <node pkg="my_python_pkg" exec="number_publisher" name="renamed_number_publisher"> <!-- Renaming node name using name attribute -->
-      <remap from="/number" to="/renamed_number"/> <!-- Renaming topic name using remap tag inside node tag -->
+
+    <node pkg="my_python_pkg" exec="number_publisher" name="renamed_number_publisher">
+      <remap from="/number" to="/renamed_number"/>
+      <!-- <param name="count" value="10000"/>
+      <param name="timer_period" value="3.0"/> -->
+      <param from="$(find-pkg-share my_robot_bringup)/config/number_params.yaml"/>
     </node>
+
+
     <node pkg="my_cpp_pkg" exec="number_counter" name="renamed_number_counter">
         <remap from="/number" to="/renamed_number"/>
+        <remap from="/number_count" to="/renamed_number_count"/>
     </node>
+
 </launch>

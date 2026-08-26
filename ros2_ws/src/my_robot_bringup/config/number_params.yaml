@@ -1,0 +1,4 @@
+/renamed_number_publisher:
+  ros__parameters:
+    count: 310
+    timer_period: 0.6

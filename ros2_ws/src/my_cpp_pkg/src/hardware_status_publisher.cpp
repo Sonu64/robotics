@@ -4,14 +4,6 @@
 
 
 
-
-
-
-
-
-
-
-
 class HardwareStatusPublisherNode : public rclcpp::Node {
 public:
     HardwareStatusPublisherNode() : Node("hardware_status_publisher")  { 

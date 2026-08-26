@@ -45,25 +45,25 @@ class LedPanelNode : public rclcpp::Node {
             led_panel_state_pub_->publish(msg);
         }
 
-        void callbackSetLed(
+        void callbackSetLed (
             const my_robot_interfaces::srv::SetLed::Request::SharedPtr request,
-            my_robot_interfaces::srv::SetLed::Response::SharedPtr response)
-        {
-            int led_number = request->led_number;
-            bool state = request->state;
+            my_robot_interfaces::srv::SetLed::Response::SharedPtr response) {
 
-            // Reject anything outside the array's actual bounds — works for ANY size
-            if (led_number < 0 || led_number >= static_cast<int>(led_states_.size())) {
-                RCLCPP_WARN(this->get_logger(), "Invalid LED number received: %d", led_number);
-                response->success = false;
-                return;
-            }
+                int led_number = request->led_number;
+                bool state = request->state;
 
-            led_states_[led_number] = state ? 1 : 0;
-            publish_led_states();  // reuse the same function the timer uses
+                // Reject anything outside the array's actual bounds — works for ANY size
+                if (led_number < 0 || led_number >= static_cast<int>(led_states_.size())) {
+                    RCLCPP_WARN(this->get_logger(), "Invalid LED number received: %d", led_number);
+                    response->success = false;
+                    return;
+                }
 
-            RCLCPP_INFO(this->get_logger(), "LED %d turned %s.", led_number, state ? "ON" : "OFF");
-            response->success = true;
+                led_states_[led_number] = state ? 1 : 0;
+                publish_led_states();  // reuse the same function the timer uses
+
+                RCLCPP_INFO(this->get_logger(), "LED %d turned %s.", led_number, state ? "ON" : "OFF");
+                response->success = true;
         }
 };
 
