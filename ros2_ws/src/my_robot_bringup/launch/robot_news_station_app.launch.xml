@@ -1,0 +1,36 @@
+<launch>
+
+    <node pkg="my_cpp_pkg" exec="robot_news_station" name="robo_news_station_giskard">
+        <!-- No renaming of topics, Params included via YAML file below-->
+        <param from="$(find-pkg-share my_robot_bringup)/config/robo_news_params.yaml"/>
+    </node>
+
+
+    <node pkg="my_cpp_pkg" exec="robot_news_station" name="robo_news_station_bb8">
+        <!-- No renaming of topics, Params included via YAML file below-->
+        <param from="$(find-pkg-share my_robot_bringup)/config/robo_news_params.yaml"/>
+    </node>
+
+
+    <node pkg="my_cpp_pkg" exec="robot_news_station" name="robo_news_station_daneel">
+        <!-- No renaming of topics, Params included via YAML file below-->
+        <param from="$(find-pkg-share my_robot_bringup)/config/robo_news_params.yaml"/>
+    </node>
+
+
+    <node pkg="my_cpp_pkg" exec="robot_news_station" name="robo_news_station_lander">
+        <!-- No renaming of topics, Params included via YAML file below-->
+        <param from="$(find-pkg-share my_robot_bringup)/config/robo_news_params.yaml"/>
+    </node>
+
+
+    <node pkg="my_cpp_pkg" exec="robot_news_station" name="robo_news_station_c3po">
+        <!-- No renaming of topics, Params included via YAML file below-->
+        <param from="$(find-pkg-share my_robot_bringup)/config/robo_news_params.yaml"/>
+    </node>
+
+    <node pkg="my_cpp_pkg" exec="smartphone">
+        <!-- No renaming of topics, No params needed -->
+    </node> 
+
+</launch>
