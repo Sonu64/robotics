@@ -10,13 +10,7 @@ public:
         RCLCPP_INFO(this->get_logger(), "TurtleSpawner node has been started.");
         alive_turtles_pub_ = this->create_publisher<turtlesim::msg::Pose>("alive_turtles", 10);
     }
- 
-private:
-
-    rclcpp::Publisher<turtlesim::msg::Pose>::SharedPtr alive_turtles_pub_;
-
-
-    void spawnTurtle(double x, double y, double theta) {
+     void spawnTurtle(double x, double y, double theta) {
         auto client = this->create_client<turtlesim::srv::Spawn>("spawn");
         while (!client->wait_for_service(std::chrono::seconds(1))) {
             RCLCPP_WARN(this->get_logger(), "Spawn service not available, waiting again...");
@@ -28,11 +22,19 @@ private:
         request->theta = theta;
         auto future = client->async_send_request(request, std::bind(&TurtleSpawner::spawnCallback, this, std::placeholders::_1));
 
-        //..publish to topic here !
-        alive_turtles_pub_->publish(turtlesim::msg::Pose{.x = x, .y = y, .theta = theta});
-    
-    }
+        last_spawned_turtle_pose_.x = x;
+        last_spawned_turtle_pose_.y = y;
+        last_spawned_turtle_pose_.theta = theta;
+        alive_turtles_pub_->publish(last_spawned_turtle_pose_);
 
+        //..publish to topic here !
+        alive_turtles_pub_->publish(last_spawned_turtle_pose_);
+        
+    }
+private:
+
+    rclcpp::Publisher<turtlesim::msg::Pose>::SharedPtr alive_turtles_pub_;
+    turtlesim::msg::Pose last_spawned_turtle_pose_;
 
 
     void spawnCallback(rclcpp::Client<turtlesim::srv::Spawn>::SharedFuture future) {
