@@ -2,6 +2,7 @@
 #include "turtlesim/srv/spawn.hpp"
 #include "turtlesim/srv/kill.hpp"
 #include "turtlesim/msg/pose.hpp"
+#include "turtlegame_interfaces/msg/turtle_array.hpp"
  
 
 class TurtleSpawner : public rclcpp::Node {
@@ -41,10 +42,9 @@ public:
         last_spawned_turtle_pose_.x = x;
         last_spawned_turtle_pose_.y = y;
         last_spawned_turtle_pose_.theta = theta;
-        
 
-        //..publish to topic here !
-        alive_turtles_pub_->publish(last_spawned_turtle_pose_);
+        alive_turtles_.turtles.push_back(new_turtle);   // append to the array field
+        alive_turtles_pub_->publish(alive_turtles_);     // publish the whole thing
         
     }
 private:
@@ -53,6 +53,7 @@ private:
     rclcpp::Client<turtlesim::srv::Spawn>::SharedPtr spawn_client_;  // member now
     rclcpp::Publisher<turtlesim::msg::Pose>::SharedPtr alive_turtles_pub_;
     turtlesim::msg::Pose last_spawned_turtle_pose_;
+    turtlegame_interfaces::msg::TurtleArray alive_turtles_;  // <-- your variable, holds full state
 
 
     void spawnCallback(rclcpp::Client<turtlesim::srv::Spawn>::SharedFuture future) {

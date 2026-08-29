@@ -16,7 +16,7 @@ add_executable(turtle_spawner src/turtle_spawner.cpp)
 
 # Dependencies
 ament_target_dependencies(turtle_controller rclcpp turtlesim)
-ament_target_dependencies(turtle_spawner rclcpp turtlesim)
+ament_target_dependencies(turtle_spawner rclcpp turtlesim turtlegame_interfaces)
 
 
 # Dont forget the executables installation, otherwise you won't be able to run them using ros2 run command. It will say "No executable found" if you forget to add this part.
