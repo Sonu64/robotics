@@ -14,6 +14,10 @@ public:
         alive_turtles_pub_ = this->create_publisher<turtlegame_interfaces::msg::TurtleArray>("alive_turtles", 10);
 
         spawn_client_ = this->create_client<turtlesim::srv::Spawn>("spawn"); // Make it here !
+
+        catch_turtle_service_ = this->create_service<turtlegame_interfaces::srv::CatchTurtle>(
+            "catch_turtle",
+            std::bind(&TurtleSpawner::catchTurtleCallback, this, std::placeholders::_1, std::placeholders::_2));
         
         timer_ = this->create_wall_timer(
       std::chrono::seconds(1),
@@ -56,11 +60,39 @@ private:
     turtlegame_interfaces::msg::Turtle last_spawned_turtle_;
     turtlegame_interfaces::msg::TurtleArray alive_turtles_;  // <-- your variable, holds full state
 
+    // making the catch_turtle_service
+    rclcpp::Service<turtlegame_interfaces::srv::CatchTurtle>::SharedPtr catch_turtle_service_;
+
+
 
     void spawnCallback(rclcpp::Client<turtlesim::srv::Spawn>::SharedFuture future) {
         // we are logging the new turtle name here only, the coordinates are publihsed to alive_turtles topic in the spawnTurtle() function, so we dont need to log them here again.
         auto response = future.get();
         RCLCPP_INFO(this->get_logger(), "Spawned turtle with name: %s.", response->name.c_str());
+    }
+
+
+    void catchTurtleCallback(const std::shared_ptr<turtlegame_interfaces::srv::CatchTurtle::Request> request,
+                             std::shared_ptr<turtlegame_interfaces::srv::CatchTurtle::Response> response) {
+        /* Implement the logic to catch a turtle */
+        string turtle_name_to_catch = request->name;
+
+        // FInding the appropriate turtle in the alive_turtles_ array
+        auto it = std::find_if(alive_turtles_.turtles.begin(), alive_turtles_.turtles.end(), [&](const turtlegame_interfaces::msg::Turtle &turtle) {
+            return turtle.name == turtle_name_to_catch;
+        });
+
+        if (it != alive_turtles_.turtles.end()) {
+            // Turtle found, remove it from the array
+            alive_turtles_.turtles.erase(it);
+            response->success = true;
+            alive_turtles_pub_->publish(alive_turtles_);     // publish the whole thing
+            RCLCPP_INFO(this->get_logger(), "Caught turtle: %s", turtle_name_to_catch.c_str());
+        } else {
+            // Turtle not found
+            response->success = false;
+            RCLCPP_WARN(this->get_logger(), "Turtle not found: %s", turtle_name_to_catch.c_str());
+        }
     }
 };
  
