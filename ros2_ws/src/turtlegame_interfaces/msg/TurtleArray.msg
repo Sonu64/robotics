@@ -1,3 +1,3 @@
-...# Array of another custom type Turtle #...
+# Array of another custom type Turtle
 
-Turtle turtles
+Turtle[] turtles

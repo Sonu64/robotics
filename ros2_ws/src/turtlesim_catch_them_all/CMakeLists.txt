@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(turtlesim REQUIRED)
+find_package(turtlegame_interfaces REQUIRED)
 
 # Executables
 add_executable(turtle_controller src/turtle_controller.cpp)
