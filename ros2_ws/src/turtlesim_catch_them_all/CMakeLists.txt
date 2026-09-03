@@ -16,7 +16,7 @@ add_executable(turtle_controller src/turtle_controller.cpp)
 add_executable(turtle_spawner src/turtle_spawner.cpp)
 
 # Dependencies
-ament_target_dependencies(turtle_controller rclcpp turtlesim)
+ament_target_dependencies(turtle_controller rclcpp turtlesim turtlegame_interfaces)
 ament_target_dependencies(turtle_spawner rclcpp turtlesim turtlegame_interfaces)
 
 

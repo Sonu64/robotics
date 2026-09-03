@@ -102,7 +102,7 @@ private:
             
             while (!kill_client->wait_for_service(std::chrono::seconds(1))) {
                 RCLCPP_WARN(this->get_logger(), "Kill service not available, waiting again...");
-                response->sucess = false;  // indicate failure to catch the turtle
+                response->success = false;  // indicate failure to catch the turtle
                 return;  // don't block forever inside a timer callback
             }
             auto kill_request = std::make_shared<turtlesim::srv::Kill::Request>();
