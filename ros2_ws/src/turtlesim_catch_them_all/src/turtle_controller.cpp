@@ -17,20 +17,27 @@ public:
         alive_turtles_sub_ = this->create_subscription<turtlegame_interfaces::msg::TurtleArray>(
             "alive_turtles", 10,
             std::bind(&TurtleController::aliveTurtlesCallback, this, std::placeholders::_1));
+
+        catch_turtle_timer_ = this->create_wall_timer(
+            std::chrono::seconds(2),
+            std::bind(&TurtleController::catchTurtleCallback, this));
     }
  
 private:
     rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr master_turtle_sub_;
     rclcpp::Subscription<turtlegame_interfaces::msg::TurtleArray>::SharedPtr alive_turtles_sub_;
+    rclcpp::TimerBase::SharedPtr catch_turtle_timer_;
 
     // Global vars for master turtle position, only x and y, not a dedicated POSE type.
     double master_turtle_x_ = 0.0;
     double master_turtle_y_ = 0.0;
-    rclcpp::<turtlegame_interfaces::msg::TurtleArray>::SharedPtr alive_turtles_msg_ = nullptr;  // Global variable to hold the latest alive turtles message
+    double master_turtle_theta_ = 0.0;
+    rclcpp::turtlegame_interfaces::msg::TurtleArray::SharedPtr alive_turtles_msg_ = nullptr;  // Global variable to hold the latest alive turtles message
 
     void masterTurtlePoseCallback(const turtlesim::msg::Pose::SharedPtr msg) {
         master_turtle_x_ = msg->x;
         master_turtle_y_ = msg->y;
+        master_turtle_theta_ = msg->theta;
         // RCLCPP_INFO(this->get_logger(), "Master turtle position updated: (x: %.2f, y: %.2f)", master_turtle_x_, master_turtle_y_);
     }
 
@@ -55,13 +62,22 @@ private:
         RCLCPP_INFO(this->get_logger(), "1st alive turtle - %s with coordinates (x: %.2f, y: %.2f)",
             target.name.c_str(), target.x, target.y);
 
-        double target_x = alive_turtles_msg_->turtles.empty() ? 0.0f : alive_turtles_msg_->turtles[0].x;
-        double target_y = alive_turtles_msg_->turtles.empty() ? 0.0f : alive_turtles_msg_->turtles[0].y;
+        double target_x = alive_turtles_msg_->turtles[0].x;
+        double target_y = alive_turtles_msg_->turtles[0].y;
 
         // Need to get the master turtles position to calculate the distance to the target turtle
         // For this, we can use a member variable to store the latest master turtle position
         double distance = std::sqrt(std::pow(target_x - master_turtle_x_, 2) + std::pow(target_y - master_turtle_y_, 2));
         RCLCPP_INFO(this->get_logger(), "Distance to target turtle: %.2f", distance);
+
+        double angle_to_target = atan2(target_y - master_turtle_y_, target_x - master_turtle_x_);
+        double angle_diff = angle_to_target - master_turtle_theta_;
+
+        // Angle Normalization: Ensure the angle difference is within the range [-π, π]. I still dont properly understand why this is needed, but it seems to be a common practice in robotics to avoid issues with angle wrapping. - THIS IS A TODO TO UNDERSTAND LATER, FOR NOW I JUST COPY PASTE IT FROM THE INTERNET.
+        while (angle_diff > M_PI) angle_diff -= 2 * M_PI;
+        while (angle_diff < -M_PI) angle_diff += 2 * M_PI;
+
+        RCLCPP_INFO(this->get_logger(), "Angle to target turtle: %.2f, Angle difference: %.2f", angle_to_target, angle_diff);
     }
 
     void aliveTurtlesCallback(const turtlegame_interfaces::msg::TurtleArray::SharedPtr msg) {
