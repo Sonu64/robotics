@@ -26,7 +26,7 @@ private:
     // Global vars for master turtle position, only x and y, not a dedicated POSE type.
     double master_turtle_x_ = 0.0;
     double master_turtle_y_ = 0.0;
-    rclcpp::<turtlegame_interfaces::msg::TurtleArray>::SharedPtr alive_turtles_msg_;
+    rclcpp::<turtlegame_interfaces::msg::TurtleArray>::SharedPtr alive_turtles_msg_ = nullptr;  // Global variable to hold the latest alive turtles message
 
     void masterTurtlePoseCallback(const turtlesim::msg::Pose::SharedPtr msg) {
         master_turtle_x_ = msg->x;
@@ -36,24 +36,40 @@ private:
 
     void catchTurtleCallback() {
 
-        // WARNING: This function is called when a turtle is caught. and there is no msg here, so we need to get the latest alive turtles from the alive_turtles_msg_ member variable, which is updated in the aliveTurtlesCallback() function. OR USE global other vars or other ways -------- TODO !!!!!!!!
+        // WARNING: This function is called when a turtle is caught. The global alive_turtles_msg_ variable is updated in the aliveTurtlesCallback function, which is called whenever the list of alive turtles is updated. So, we can use the alive_turtles_msg_ variable here to get the latest list of alive turtles.
 
-        // Log the names of the alive turtles
-        RCLCPP_INFO(this->get_logger(), "1st alive turtle - %s with coordinates (x: %.2f, y: %.2f):", msg->turtles.empty() ? "None" : msg->turtles[0].name.c_str(), msg->turtles.empty() ? 0.0f : msg->turtles[0].x, msg->turtles.empty() ? 0.0f : msg->turtles[0].y);
+        if (!alive_turtles_msg_) {
+            RCLCPP_WARN(this->get_logger(), "No alive_turtles message received yet.");
+            return;
+        }
 
-        double target_x = msg->turtles.empty() ? 0.0f : msg->turtles[0].x;
-        double target_y = msg->turtles.empty() ? 0.0f : msg->turtles[0].y;
+        if (alive_turtles_msg_->turtles.empty()) {
+            RCLCPP_INFO(this->get_logger(), "No turtles to catch.");
+            return;
+        }
+
+        // const& avoids copying the Turtle (it owns a std::string, not free to copy);
+        // rule of thumb: use const auto& when reading structs/strings/vectors, plain copy is fine for small primitives like double/int. const ensures we don't accidentally modify the target turtle.
+        const auto &target = alive_turtles_msg_->turtles[0];
+        
+        RCLCPP_INFO(this->get_logger(), "1st alive turtle - %s with coordinates (x: %.2f, y: %.2f)",
+            target.name.c_str(), target.x, target.y);
+
+        double target_x = alive_turtles_msg_->turtles.empty() ? 0.0f : alive_turtles_msg_->turtles[0].x;
+        double target_y = alive_turtles_msg_->turtles.empty() ? 0.0f : alive_turtles_msg_->turtles[0].y;
 
         // Need to get the master turtles position to calculate the distance to the target turtle
         // For this, we can use a member variable to store the latest master turtle position
-        if (!msg->turtles.empty()) {
-            double distance = std::sqrt(std::pow(target_x - master_turtle_x_, 2) + std::pow(target_y - master_turtle_y_, 2));
-            RCLCPP_INFO(this->get_logger(), "Distance to target turtle: %.2f", distance);
-        }
+        double distance = std::sqrt(std::pow(target_x - master_turtle_x_, 2) + std::pow(target_y - master_turtle_y_, 2));
+        RCLCPP_INFO(this->get_logger(), "Distance to target turtle: %.2f", distance);
     }
 
     void aliveTurtlesCallback(const turtlegame_interfaces::msg::TurtleArray::SharedPtr msg) {
         // This callback will be called whenever the list of alive turtles is updated.
+
+        // update global member variable turtles with the latest alive turtles message
+        alive_turtles_msg_ = msg;
+
         RCLCPP_INFO(this->get_logger(), "Received updated list of alive turtles. Total: %zu", msg->turtles.size());
         // Implement your logic to decide which turtle to catch in a timer based function, not here.
     }
