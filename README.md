@@ -28,7 +28,7 @@ source install/setup.bash
 
 Restarting on 25/08/2026 from my new LOQ.
 
-Windows also works as of 6/9/2026
+Windows also works as of 6/9/2026. Terminal also works.
 
 ## License
 
