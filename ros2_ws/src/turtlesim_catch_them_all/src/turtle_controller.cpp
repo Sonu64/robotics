@@ -4,6 +4,7 @@
 #include "turtlesim/msg/pose.hpp"
 #include "turtlegame_interfaces/msg/turtle_array.hpp"
 #include "turtlegame_interfaces/srv/catch_turtle.hpp"
+#include "geometry_msgs/msg/twist.hpp"
  
 
 class TurtleController : public rclcpp::Node {
@@ -21,18 +22,26 @@ public:
         catch_turtle_timer_ = this->create_wall_timer(
             std::chrono::seconds(2),
             std::bind(&TurtleController::catchTurtleCallback, this));
+
+        cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("turtle1/cmd_vel", 10);
+
+        catch_turtle_client_ = this->create_client<turtlegame_interfaces::srv::CatchTurtle>("catch_turtle");
     }
  
 private:
+    static constexpr double DISTANCE_GAIN = 2.0;
+    static constexpr double ANGLE_GAIN = 6.0;
     rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr master_turtle_sub_;
     rclcpp::Subscription<turtlegame_interfaces::msg::TurtleArray>::SharedPtr alive_turtles_sub_;
     rclcpp::TimerBase::SharedPtr catch_turtle_timer_;
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
+    rclcpp::Client<turtlegame_interfaces::srv::CatchTurtle>::SharedPtr catch_turtle_client_;
 
     // Global vars for master turtle position, only x and y, not a dedicated POSE type.
     double master_turtle_x_ = 0.0;
     double master_turtle_y_ = 0.0;
     double master_turtle_theta_ = 0.0;
-    rclcpp::turtlegame_interfaces::msg::TurtleArray::SharedPtr alive_turtles_msg_ = nullptr;  // Global variable to hold the latest alive turtles message
+    turtlegame_interfaces::msg::TurtleArray::SharedPtr alive_turtles_msg_ = nullptr;  // Global variable to hold the latest alive turtles message
 
     void masterTurtlePoseCallback(const turtlesim::msg::Pose::SharedPtr msg) {
         master_turtle_x_ = msg->x;
@@ -77,7 +86,30 @@ private:
         while (angle_diff > M_PI) angle_diff -= 2 * M_PI;
         while (angle_diff < -M_PI) angle_diff += 2 * M_PI;
 
+        geometry_msgs::msg::Twist cmd;
+
+        // Need to check thresholds
+        // Not close enough yet
+        if (distance > 0.5) {
+            cmd.linear.x = DISTANCE_GAIN * distance;
+            cmd.angular.z = ANGLE_GAIN * angle_diff;
+        } 
+        // Reached the target turtle, stop moving
+        else {
+            cmd.linear.x = 0.0;
+            cmd.angular.z = 0.0;
+            RCLCPP_INFO(this->get_logger(), "Reached the target turtle: %s", target.name.c_str());
+
+            // Call the catch_turtle service to catch the target turtle
+            auto request = std::make_shared<turtlegame_interfaces::srv::CatchTurtle::Request>();
+            request->name = target.name;
+            catch_turtle_client_->async_send_request(request);
+        }
+
         RCLCPP_INFO(this->get_logger(), "Angle to target turtle: %.2f, Angle difference: %.2f", angle_to_target, angle_diff);
+
+        // Publish the command to move the turtle
+        cmd_vel_pub_->publish(cmd);
     }
 
     void aliveTurtlesCallback(const turtlegame_interfaces::msg::TurtleArray::SharedPtr msg) {
