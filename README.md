@@ -28,6 +28,8 @@ source install/setup.bash
 
 Restarting on 25/08/2026 from my new LOQ.
 
+Windows also works as of 6/9/2026
+
 ## License
 
 No License required for now as this is a Learning Project.
