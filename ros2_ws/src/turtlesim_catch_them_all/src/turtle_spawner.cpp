@@ -20,7 +20,7 @@ public:
             std::bind(&TurtleSpawner::catchTurtleCallback, this, std::placeholders::_1, std::placeholders::_2));
         
         timer_ = this->create_wall_timer(
-      std::chrono::seconds(5),
+      std::chrono::milliseconds(900),  // spawn a turtle every 1.5s
       std::bind(&TurtleSpawner::spawnTurtle, this));
     
       kill_client = this->create_client<turtlesim::srv::Kill>("kill");

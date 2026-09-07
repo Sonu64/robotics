@@ -20,7 +20,7 @@ public:
             std::bind(&TurtleController::aliveTurtlesCallback, this, std::placeholders::_1));
 
         catch_turtle_timer_ = this->create_wall_timer(
-            std::chrono::seconds(2),
+            std::chrono::milliseconds(100),
             std::bind(&TurtleController::catchTurtleCallback, this));
 
         cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("turtle1/cmd_vel", 10);
@@ -29,8 +29,9 @@ public:
     }
  
 private:
-    static constexpr double DISTANCE_GAIN = 2.0;
-    static constexpr double ANGLE_GAIN = 6.0;
+    static constexpr double DISTANCE_GAIN = 3.4;
+    static constexpr double ANGLE_GAIN = 3.0;
+
     rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr master_turtle_sub_;
     rclcpp::Subscription<turtlegame_interfaces::msg::TurtleArray>::SharedPtr alive_turtles_sub_;
     rclcpp::TimerBase::SharedPtr catch_turtle_timer_;
@@ -66,19 +67,34 @@ private:
 
         // const& avoids copying the Turtle (it owns a std::string, not free to copy);
         // rule of thumb: use const auto& when reading structs/strings/vectors, plain copy is fine for small primitives like double/int. const ensures we don't accidentally modify the target turtle.
-        const auto &target = alive_turtles_msg_->turtles[0];
+        double min_distance = std::numeric_limits<double>::max();
+        const turtlegame_interfaces::msg::Turtle* closest_turtle = nullptr;
+
+    
+        for(const auto& turtle: alive_turtles_msg_->turtles) {
+            double distance = std::sqrt(std::pow(turtle.x - master_turtle_x_, 2) + std::pow(turtle.y - master_turtle_y_, 2));
+            if (distance < min_distance) {
+                min_distance = distance;
+                closest_turtle = &turtle;
+            }
+        }
+
+        if (!closest_turtle) {
+            RCLCPP_WARN(this->get_logger(), "No target turtle found.");
+            return;
+        }
         
         RCLCPP_INFO(this->get_logger(), "1st alive turtle - %s with coordinates (x: %.2f, y: %.2f)",
-            target.name.c_str(), target.x, target.y);
+            closest_turtle->name.c_str(), closest_turtle->x, closest_turtle->y);
 
-        double target_x = alive_turtles_msg_->turtles[0].x;
-        double target_y = alive_turtles_msg_->turtles[0].y;
+
+        double target_x = closest_turtle->x;
+        double target_y = closest_turtle->y;
 
         // Need to get the master turtles position to calculate the distance to the target turtle
         // For this, we can use a member variable to store the latest master turtle position
-        double distance = std::sqrt(std::pow(target_x - master_turtle_x_, 2) + std::pow(target_y - master_turtle_y_, 2));
+        double distance = min_distance;  // We already calculated the distance to the closest turtle above
         RCLCPP_INFO(this->get_logger(), "Distance to target turtle: %.2f", distance);
-
         double angle_to_target = atan2(target_y - master_turtle_y_, target_x - master_turtle_x_);
         double angle_diff = angle_to_target - master_turtle_theta_;
 
@@ -98,11 +114,11 @@ private:
         else {
             cmd.linear.x = 0.0;
             cmd.angular.z = 0.0;
-            RCLCPP_INFO(this->get_logger(), "Reached the target turtle: %s", target.name.c_str());
+            RCLCPP_INFO(this->get_logger(), "Reached the target turtle: %s", closest_turtle->name.c_str());
 
             // Call the catch_turtle service to catch the target turtle
             auto request = std::make_shared<turtlegame_interfaces::srv::CatchTurtle::Request>();
-            request->name = target.name;
+            request->name = closest_turtle->name;
             catch_turtle_client_->async_send_request(request);
         }
 

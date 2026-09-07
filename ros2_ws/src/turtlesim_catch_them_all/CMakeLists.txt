@@ -10,13 +10,14 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(turtlesim REQUIRED)
 find_package(turtlegame_interfaces REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 # Executables
 add_executable(turtle_controller src/turtle_controller.cpp)
 add_executable(turtle_spawner src/turtle_spawner.cpp)
 
 # Dependencies
-ament_target_dependencies(turtle_controller rclcpp turtlesim turtlegame_interfaces)
+ament_target_dependencies(turtle_controller rclcpp turtlesim turtlegame_interfaces geometry_msgs)
 ament_target_dependencies(turtle_spawner rclcpp turtlesim turtlegame_interfaces)
 
 
