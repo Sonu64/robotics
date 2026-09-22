@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<robot name="success_practice_bot">
+<robot name="joints_practice_bot">
 
   <material name="polished_gold">
     <!-- Warm, deep metallic gold instead of flat yellow -->
@@ -26,7 +26,6 @@
             </geometry>
             <origin xyz="0 0 0.1" rpy=" 0 0 0"/>  
             <material name="anodized_crimson">
-                <color rgba=""/>
             </material>             
         </visual>
     </link>
@@ -43,19 +42,7 @@
     </link>
 
 
-    <link name="third_link">
-        <visual>
-            <geometry>
-                <box size="0.4 0.6 0.2"/>    
-            </geometry>
-            <origin xyz="0 0 0.1" rpy=" 0 0 0"/>  
-            <material name="dark_cream_blue_metallic">
-            </material>             
-        </visual>
-    </link>
-
-
-
+    <!-- Fixed Joint-->
     <joint name="base_second_joint" type="fixed">
         <parent link="base_link"/>
         <child link="second_link"/>
@@ -63,11 +50,39 @@
     </joint>
 
 
-    <joint name="second_third_joint" type="fixed">
-        <parent link="second_link"/>
-        <child link="third_link"/>
+
+    <!-- Revolute Joint -->
+    <joint name="base_second_joint" type="revolute">
+        <parent link="base_link"/>
+        <child link="second_link"/>
+        <limit lower="-1.57" upper="1.57" effort="30" velocity="1.0"/>
+        <axis xyz="0 0 1"/>
         <origin xyz="0 0 0.2" rpy="0 0 0"/>
-    </joint>    
+    </joint>
+
+    <!-- Continuous Joint -->
+    <joint name="base_second_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="second_link"/>
+        <limit effort="30" velocity="1.0"/>
+        <axis xyz="0 0 1"/>
+        <origin xyz="0 0 0.2" rpy="0 0 0"/>
+    </joint>
+
+
+    <!-- Prismatic Joint -->
+    <joint name="base_second_joint" type="prismatic">
+        <parent link="base_link"/>
+        <child link="second_link"/>
+        <limit lower="-0.15" upper="0.15" effort="10" velocity="1.0"/>
+        <axis xyz="1 0 0"/>
+        <origin xyz="0 0 0.2" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Prismatic either Overrides everything before it - VS Code integrated URDF viewer. URDF Crashes in RVIZ as single joint is configured multiple times, different ways !-->
+
+
+    
 
 
 </robot>
