@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<robot name="Red_Cherry_Bot">
+
+     <!-- Vibrant & Metallic Material Palette -->
+
+<material name="cherry_light_red">
+  <!-- Bright, vibrant cherry red with high saturation -->
+  <color rgba="0.85 0.09 0.21 1.0" />
+</material>
+
+<material name="metallic_grey">
+  <!-- Mid-tone gunmetal/silver grey finish -->
+  <color rgba="1 1 1 1.0"/>
+</material>
+
+
+
+
+
+
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.6 0.4 0.2"/>
+      </geometry>
+      <origin xyz="0 0 0.1" rpy="0 0 0"/>
+      <material name="cherry_light_red"/>
+    </visual>
+  </link>
+
+  <link name="right_wheel_link">
+    <visual>
+        <geometry>
+            <cylinder radius="0.1" length="0.05"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="1.57 0 0"/>
+        <material name="metallic_grey"/>
+    </visual>
+  </link>
+
+ <!-- We chose to keep visual at 000, joint is centered at the visual. So we added 0.025 to the y-coordinate of cylinder. Why 0.025 ? half of cylinder height. Note that if we put origin = "0 0.025 0" in visual, it would look same, but the structure is a lot different ! And how did we find position of joint ? By halving box lengths, simple but effective. Remianing was the sync the joint with the visual. We did this by ensuring the joint origin matched the visual origin. We DID NOT Edited visual origin this time !-->
+
+  <joint name="base_right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_link"/>
+    <origin xyz="-0.15 -0.225 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  
+ 
+
+
+</robot>
