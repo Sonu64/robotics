@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<robot name="multipleshapes">
+
+     <!-- Rich Metallic & Polished Materials -->
+  <material name="metallic_emerald">
+    <!-- Deep, saturated teal-green with a rich undertone -->
+    <color rgba="0.05 0.40 0.25 1.0" />
+  </material>
+
+  <material name="polished_gold">
+    <!-- Warm, deep metallic gold instead of flat yellow -->
+    <color rgba="0.85 0.65 0.15 1.0" />
+  </material>
+
+  <material name="anodized_crimson">
+    <!-- Deep, rich metallic red -->
+    <color rgba="0.65 0.05 0.10 1.0" />
+  </material>
+
+
+
+
+
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.6" radius="0.2"/>
+      </geometry>
+      <material name="metallic_emerald"/>
+    </visual>
+  </link>
+
+  <link name="right_leg">
+    <visual>
+      <geometry>
+        <box size="0.6 0.1 0.2"/>
+      </geometry>
+      <origin xyz="0.1 0 0" rpy="0 0 0"/>
+      <material name="polished_gold"/>
+    </visual>
+  </link>
+
+  <link name="left_leg">
+    <visual>
+      <geometry>
+        <box size="0.6 0.1 0.2"/>
+      </geometry>
+      <origin xyz="0.1 0 0" rpy="0 0 0"/>
+      <material name="anodized_crimson"/>
+    </visual>
+  </link>
+
+  <joint name="base_right_leg_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_leg"/>
+    <origin xyz="-0.2 0 0" rpy="1.57 1.5708 0"/>
+  </joint>
+
+  <joint name="base_left_leg_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_leg"/>
+    <origin xyz="0.2 0 0" rpy="1.57 1.5708 0"/>
+  </joint>
+</robot>
