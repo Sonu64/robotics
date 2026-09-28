@@ -70,7 +70,7 @@
 <joint name="base_joint" type="fixed">
   <parent link="base_footprint_link"/>
   <child link="base_link"/>
-  <origin xyz="0 0 0.1" rpy="0 0 0"/>
+  <origin xyz="0 0 0.1" rpy="0 0 0"/> <!-- 0.1 because thats wheel offset from ground, the wheel radius ! We want this joint/TF at the ground ! the base_footprint is the projection of the base on the ground and robot is correctly placed herein ! As base link offset by 0.1, every children of it got by same and nothing actually changes for the parts of the robot.-->
 </joint>
 
 
