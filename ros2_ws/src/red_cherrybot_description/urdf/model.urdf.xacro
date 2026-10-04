@@ -9,5 +9,6 @@
 
 
 
+<!-- Method to use custom meshes designed in CAD Sfotwares: Create a meshes folder in the pkg, install the folder in CMakeLists.txt and then reference them in the URDF file. Use the mesh include filename syntax. Including the custom mesh in the URDF here is not difficult, but designing it is the actual hard part. We also need to Scale Down/Up frequently in urdf as original STL file of CAD is bigger/smaller.-->
 
 </robot>
