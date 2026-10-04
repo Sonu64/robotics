@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Vibrant & Metallic Material Palette -->
+    <material name="cherry_light_red">
+        <!-- Bright, vibrant cherry red with high saturation -->
+        <color rgba="0.85 0.09 0.21 1.0" />
+    </material>
+
+    <material name="bright_white">
+        <!-- Bright White finish -->
+        <color rgba="0 0 1 1.0"/>
+    </material>
+
+</robot>
