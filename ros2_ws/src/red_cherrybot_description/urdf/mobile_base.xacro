@@ -18,6 +18,9 @@
       <origin xyz="0 0 ${base_height/2.0}" rpy="0 0 0"/>
       <material name="cherry_light_red"/>
     </visual>
+
+    <xacro:box_inertia m="10" x="${base_length}" y="${base_width}" z="${base_height}" o_xyz="0 0 ${base_height/2.0}" o_rpy="0 0 0"/>
+    <!-- mass is in KG, so put realistic values though its Simulation. Here its 10Kg -->
   </link>
 
 
@@ -51,7 +54,7 @@
 
 
   <link name="base_footprint_link">
-    <!--No visual-->
+    <!--No visual, or inertia-->
   </link>
 
  <!-- We chose to keep visual at 000, joint is centered at the visual. So we added 0.025 to the y-coordinate of cylinder. Why 0.025 ? half of cylinder height. Note that if we put origin = "0 0.025 0" in visual, it would look same, but the structure is a lot different ! And how did we find position of joint ? By halving box lengths, simple but effective. Remianing was the sync the joint with the visual. We did this by ensuring the joint origin matched the visual origin. We DID NOT Edited visual origin this time !-->
