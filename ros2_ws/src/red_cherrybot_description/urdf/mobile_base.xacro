@@ -19,6 +19,13 @@
       <material name="cherry_light_red"/>
     </visual>
 
+    <collision>
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}"/>
+      </geometry>
+      <origin xyz="0 0 ${base_height/2.0}" rpy="0 0 0"/>
+    </collision>
+
     <xacro:box_inertia m="10" x="${base_length}" y="${base_width}" z="${base_height}" o_xyz="0 0 ${base_height/2.0}" o_rpy="0 0 0"/>
     <!-- mass is in KG, so put realistic values though its Simulation. Here its 10Kg -->
   </link>
@@ -35,6 +42,16 @@
             <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
             <material name="bright_white"/>
       </visual>
+
+      <collision>
+            <geometry>
+            <!-- We are not choosing Cylinder for collision as it needs Gazebo to track multiple points of contact which may not make the robot work the intended way. So choosing S-->
+                <sphere radius="${wheel_radius}"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision>
+
       <xacro:cylinder_inertia m="2.0" r="${wheel_radius}" l="${wheel_length}" o_xyz="0 0 0" o_rpy="${pi/2} 0 0"/>
     </link>
   </xacro:macro>    
@@ -51,6 +68,14 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <material name="bright_white"/>
     </visual>
+
+    <collision>
+      <geometry>
+        <sphere radius="${wheel_radius/2.0}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+
     <xacro:sphere_inertia m="1.0" r="${wheel_radius/2.0}" o_xyz="0 0 0" o_rpy="0 0 0"/>
   </link>
 
