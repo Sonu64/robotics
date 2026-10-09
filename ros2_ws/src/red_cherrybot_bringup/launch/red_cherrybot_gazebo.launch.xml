@@ -29,4 +29,8 @@
         args="-topic robot_description"       
     />
 
+    <!-- Ros-Gazebo Bridge -->
+    <node pkg="ros_gz_bridge" exec="parameter_bridge">
+        <param name="config_file" value="$(find-pkg-share red_cherrybot_bringup)/config/ros_gz_bridge.yaml"/>
+    </node>
 </launch>
