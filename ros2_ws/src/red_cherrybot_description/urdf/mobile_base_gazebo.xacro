@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<!-- For eveything related to gazebo -->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <!-- Friction coefficient for Passive Caster Wheel Joints -->
+    <gazebo reference="caster_wheel_link">
+        <mu1 value="0.1"/>
+        <mu2 value="0.1"/>
+    </gazebo>
+
+
+    <gazebo>
+    <!-- Adding my 1st gazebo plugin - Differential-Drive Plugin, this is the way to add plugins-->
+        <plugin
+        filename="gz-sim-diff-drive-system"
+        name="gz::sim::systems::DiffDrive">
+                
+            <left_joint>base_left_wheel_joint</left_joint>
+            <right_joint>base_right_wheel_joint</right_joint>
+            <wheel_separation>0.5</wheel_separation>
+            <wheel_radius>0.2</wheel_radius>
+            <frame_id>odom</frame_id>
+            <!-- base_footprint_link is gonna be used to calculate odometry -->
+            <child_frame_id>base_footprint_link</child_frame_id>
+        </plugin>
+    </gazebo>
+
+
+
+
+        <!-- Joint State Publisher Plugin -->
+            <!-- Not gonna use Fake Joint State Publisher like we did earlier using joint_state_publisher_gui -->
+            <gazebo>
+                <plugin
+                filename="gz-sim-joint-state-publisher-system"
+                name="gz::sim::systems::JointStatePublisher" >
+                    <joint_name>base_left_wheel_joint</joint_name>
+                    <joint_name>base_right_wheel_joint</joint_name>
+                </plugin>
+            </gazebo>
+</robot>
