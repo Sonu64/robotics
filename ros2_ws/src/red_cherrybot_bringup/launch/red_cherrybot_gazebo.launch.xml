@@ -2,16 +2,19 @@
     <let name="urdf_path" 
     value="$(find-pkg-share red_cherrybot_description)/urdf/model.urdf.xacro" />
 
+    <let name="config_file_path"
+    value="$(find-pkg-share red_cherrybot_bringup)/config/gazebo_bridge.yaml" />
+
 
     <!-- Robot State Publisher -->
-    <node pkg="robot_state_publisher" exec="robot_state_publisher">  
+    <node pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
         <param name="robot_description" 
                value="$(command 'xacro $(var urdf_path)')" />
     </node>
 
 
     <!-- Joint State Publisher GUI -->
-    <!--<node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" />-->
+    <!-- <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" /> -->
     
 
     <!-- RViz2 with parameters -->
@@ -19,9 +22,9 @@
     args="-d $(find-pkg-share red_cherrybot_description)/rviz/urdf_config.rviz"
     />
 
-    <!-- Gazebo Simulation with ROS2 launch option, needs includes -->
+    <!-- Gazebo Simulation with ROS2 launch option, needs includes, NOT STARTING A NODE HERE !! THIS IS THE FILE INCLUSION PART !!!!! -->
     <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
-    <arg name="gz_args" value="empty.sdf -r"/>
+        <arg name="gz_args" value="empty.sdf -r"/>
     </include>
 
     <!-- Spawn the robot in gazebo -->
@@ -30,7 +33,8 @@
     />
 
     <!-- Ros-Gazebo Bridge -->
-    <node pkg="ros_gz_bridge" exec="parameter_bridge">
-        <param name="config_file" value="$(find-pkg-share red_cherrybot_bringup)/config/ros_gz_bridge.yaml"/>
+    <node pkg="ros_gz_bridge" exec="parameter_bridge" output="screen">
+        <param name="config_file" value="${var config_file_path}"/>
     </node>
+
 </launch>
