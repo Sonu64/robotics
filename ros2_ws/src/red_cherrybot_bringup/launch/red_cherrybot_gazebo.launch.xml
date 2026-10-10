@@ -34,7 +34,7 @@
 
     <!-- Ros-Gazebo Bridge -->
     <node pkg="ros_gz_bridge" exec="parameter_bridge" output="screen">
-        <param name="config_file" value="${var config_file_path}"/>
+        <param name="config_file" value="$(var config_file_path)"/>
     </node>
 
 </launch>
