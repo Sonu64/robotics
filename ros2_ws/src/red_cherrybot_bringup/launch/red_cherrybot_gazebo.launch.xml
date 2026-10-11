@@ -22,9 +22,15 @@
     args="-d $(find-pkg-share red_cherrybot_description)/rviz/urdf_config.rviz"
     />
 
+    <set_env
+        name="GZ_SIM_RESOURCE_PATH"
+        value="$(find-pkg-share red_cherrybot_bringup)/models"
+    />
+
     <!-- Gazebo Simulation with ROS2 launch option, needs includes, NOT STARTING A NODE HERE !! THIS IS THE FILE INCLUSION PART !!!!! -->
     <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
-        <arg name="gz_args" value="empty.sdf -r"/>
+        <!-- <arg name="gz_args" value="empty.sdf -r"/> -->
+        <arg name="gz_args" value="$(find-pkg-share red_cherrybot_bringup)/worlds/depot_warehouse.world -r"/>
     </include>
 
     <!-- Spawn the robot in gazebo -->

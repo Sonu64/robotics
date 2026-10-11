@@ -57,6 +57,8 @@ log/
 devel/
 *.pyc
 __pycache__/
+.ros/
+.gazebo/
 
 # Editor / IDE files
 .vscode/
