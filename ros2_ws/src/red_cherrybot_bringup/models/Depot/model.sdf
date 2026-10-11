@@ -3,13 +3,75 @@
     <model name="Depot">
         <static>false</static>
         <link name="main">
-            <collision name="collision">
-                <pose>0 0 0 0 0 0</pose>
+            <!-- Collision meshes for the warehouse structure and contents.
+                 Keep these separate so Gazebo can identify the structural
+                 surfaces and the crate obstacles independently. -->
+            <collision name="walls_collision">
                 <geometry>
-                    <plane>
-                        <normal>0 0 1</normal>
-                        <size>100 100</size>
-                    </plane>
+                    <mesh>
+                        <scale>0.6 0.6 0.6</scale>
+                        <uri>meshes/Depot.dae</uri>
+                        <submesh>
+                            <name>WALLS</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+            </collision>
+            <collision name="pillars_collision">
+                <geometry>
+                    <mesh>
+                        <scale>0.6 0.6 0.6</scale>
+                        <uri>meshes/Depot.dae</uri>
+                        <submesh>
+                            <name>PILLERS</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+            </collision>
+            <collision name="stairs_collision">
+                <geometry>
+                    <mesh>
+                        <scale>0.6 0.6 0.6</scale>
+                        <uri>meshes/Depot.dae</uri>
+                        <submesh>
+                            <name>STAIRS</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+            </collision>
+            <collision name="boxes_collision">
+                <geometry>
+                    <mesh>
+                        <scale>0.6 0.6 0.6</scale>
+                        <uri>meshes/Depot.dae</uri>
+                        <submesh>
+                            <name>BOXSET</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+            </collision>
+            <collision name="floor_collision">
+                <geometry>
+                    <mesh>
+                        <scale>0.6 0.6 0.6</scale>
+                        <uri>meshes/Depot.dae</uri>
+                        <submesh>
+                            <name>FLOOR</name>
+                            <center>false</center>
+                        </submesh>
+                    </mesh>
+                </geometry>
+            </collision>
+            <collision name="crates_collision">
+                <geometry>
+                    <mesh>
+                        <scale>0.6 0.6 0.6</scale>
+                        <uri>meshes/Crates.dae</uri>
+                    </mesh>
                 </geometry>
             </collision>
             <visual name="ROOF_visual">
@@ -428,6 +490,14 @@
         </link>
         <link name="Fan1">
             <pose>-5.0154 -0.2952 6.12 0 0 0</pose>
+            <collision name="collision">
+                <geometry>
+                    <cylinder>
+                        <radius>0.45</radius>
+                        <length>0.12</length>
+                    </cylinder>
+                </geometry>
+            </collision>
             <visual name="visual">
                 <!-- center in link -->
                 <pose>5.0154 0.2952 -6.12 0 0 0</pose>
@@ -470,6 +540,14 @@
         </link>
         <link name="Fan2">
             <pose>5.0154 -0.2952 6.12 0 0 0</pose>
+            <collision name="collision">
+                <geometry>
+                    <cylinder>
+                        <radius>0.45</radius>
+                        <length>0.12</length>
+                    </cylinder>
+                </geometry>
+            </collision>
             <visual name="visual">
                 <!-- center in link -->
                 <pose>5.0154 0.2952 -6.12 0 0 0</pose>
