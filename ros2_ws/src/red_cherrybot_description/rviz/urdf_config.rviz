@@ -75,6 +75,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         caster_wheel_link:
           Alpha: 1
           Show Axes: false
@@ -98,6 +103,17 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz_default_plugins/Image
+      Enabled: true
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Camera Image
+      Normalize Range: true
+      Queue Size: 10
+      Topic: /camera/image_raw
+      Unreliable: false
+      Value: true
     - Class: rviz_default_plugins/TF
       Enabled: true
       Filter (blacklist): ""
@@ -123,6 +139,8 @@ Visualization Manager:
       Tree:
         base_footprint_link:
           base_link:
+            camera_link:
+              {}
             caster_wheel_link:
               {}
             left_wheel_link:

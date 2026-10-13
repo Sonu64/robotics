@@ -14,5 +14,10 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(
+  FILES sensor_integration_tutorial.md
+  DESTINATION share/${PROJECT_NAME}
+)
+
 
 ament_package()
