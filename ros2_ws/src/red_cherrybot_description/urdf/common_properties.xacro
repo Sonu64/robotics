@@ -10,6 +10,10 @@
         <color rgba="0.015 0.06 0.18 1.0"/>
     </material>
 
+    <material name="camera_yellow">
+        <color rgba="0.9 0.9 0.0 1.0"/>
+    </material>
+    
     <xacro:macro name="box_inertia" params="m x y z o_xyz o_rpy">
         <inertial>
                <mass value="${m}"/>
