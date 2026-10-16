@@ -2,12 +2,12 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <!-- Gazebo-friendly material palette -->
-    <material name="robot_blue">
-        <color rgba="0.03 0.24 0.75 1.0" />
+    <material name="base_cherry_red">
+        <color rgba="1.0 0.02 0.12 1.0" />
     </material>
 
-    <material name="wheel_blue">
-        <color rgba="0.015 0.06 0.18 1.0"/>
+    <material name="wheel_black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
     </material>
 
     <material name="camera_yellow">
@@ -20,6 +20,14 @@
 
     <material name="golden_yellow">
         <color rgba="1.0 0.84 0.0 1.0"/>
+    </material>
+
+    <material name="red">
+        <color rgba="1.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="elbow_blue">
+        <color rgba="0.0 0.2 1.0 1.0"/>
     </material>
     
     <xacro:macro name="box_inertia" params="m x y z o_xyz o_rpy">
