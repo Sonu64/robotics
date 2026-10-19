@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<robot name="Red_Cherry_Bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- For the plugins of the Arm -->
+
+    <gazebo>
+    <!-- Fetched from GitHub -->
+        <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+            <joint_name>forearm_joint</joint_name>
+        </plugin>
+    </gazebo>
+
+    <gazebo>
+    <!-- Fetched from GitHub -->
+        <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+            <joint_name>elbow_joint</joint_name>
+        </plugin>
+    </gazebo>
+
+
+
+
+
+    <!-- Joint State Publisher Plugin -->
+            <!-- Not gonna use Fake Joint State Publisher like we did earlier using joint_state_publisher_gui -->
+            <gazebo>
+                <plugin
+                filename="gz-sim-joint-state-publisher-system"
+                name="gz::sim::systems::JointStatePublisher" >
+                    <joint_name>forearm_joint</joint_name>
+                    <joint_name>elbow_joint</joint_name>
+                </plugin>
+            </gazebo>
+
+</robot>    
