@@ -74,7 +74,7 @@
     <joint name="arm_base_joint" type="fixed">
         <parent link="base_link"/>
         <child link="arm_base_link"/>
-        <origin xyz="0 0 ${base_height}" rpy="0 0 0"/>
+        <origin xyz="${base_length/4.0} 0 ${base_height}" rpy="0 0 0"/>
     </joint>
 
     <joint name="forearm_joint" type="revolute">
